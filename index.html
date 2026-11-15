@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1565c0">
+  <title>Настолка</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎲</text></svg>">
+</head>
+<body>
+  <header>
+    <h1>Настолка</h1>
+  </header>
+
+  <main id="menu">
+    <button class="btn blue" data-game="draw">🎨 Рисовать</button>
+    <button class="btn blue" data-game="speak">🗣️ Говорить</button>
+    <button class="btn blue" data-game="show">🙌 Показывать</button>
+    <button class="btn blue" data-game="reverse">🔄 Реверс</button>
+    <button class="btn blue" data-game="yesno">✅ Да/Нет</button>
+    <button class="btn blue" data-game="blitz">⚡ Блиц</button>
+    <button class="btn lightblue" data-game="dice">🎲 Бросить кубик</button>
+    <button class="btn lightblue" data-game="rules">📖 Правила игры</button>
+    
+    <!-- Новая кнопка подсчета баллов -->
+    <button class="btn green" id="score-game-btn">📊 Подсчет баллов</button>
+  </main>
+
+  <!-- Оверлей для обычных игр -->
+  <div id="overlay" class="hidden">
+    <div id="modal">
+      <div id="timer-display" class="hidden">60</div>
+      <div id="content"></div>
+      <div id="modal-buttons" class="hidden">
+        <button id="start-btn" class="btn green">Старт</button>
+        <button id="close-btn" class="btn red">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Окно для рисования -->
+  <div id="draw-overlay" class="hidden">
+    <div id="draw-toolbar">
+      <button id="eraser-btn" type="button">🧽 Стёрка</button>
+      <button id="clear-btn" type="button">🗑️ Стереть всё</button>
+      <button id="done-btn" type="button">✅ Готово</button>
+    </div>
+    <div id="draw-timer">60</div>
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <!-- НОВОЕ: Окно настройки подсчета баллов -->
+  <div id="score-setup-overlay" class="hidden">
+    <div class="score-modal">
+      <h2>Настройка игры</h2>
+      <label>Количество команд:
+        <select id="score-team-count">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </label>
+      <div id="score-teams-config"></div>
+      <div class="modal-buttons-row">
+        <button id="score-start-btn" class="btn green">Начать</button>
+        <button id="score-cancel-btn" class="btn red">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- НОВОЕ: Окно самого табло -->
+  <div id="score-board-overlay" class="hidden">
+    <div class="score-topbar">
+      <button id="score-reset-btn" class="btn red">🔄 Сбросить</button>
+      <button id="score-exit-btn" class="btn">✖ Закрыть</button>
+    </div>
+    <div id="score-teams-list"></div>
+    <button id="score-end-turn-btn" class="btn green score-end-turn">Завершить ход</button>
+  </div>
+
+  <!-- НОВОЕ: Всплывающее окошко для выбора баллов -->
+  <div id="score-points-modal" class="hidden">
+    <div class="score-points-content">
+      <h3 id="score-modal-team-name">Команда</h3>
+      <div class="score-points-grid" id="score-points-grid">
+        <!-- Кнопки от -3 до 6 генерируются в JS -->
+      </div>
+      <button id="score-modal-close" class="btn">Отмена</button>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
