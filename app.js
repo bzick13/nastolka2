@@ -254,12 +254,12 @@ function initScoreGame() {
     scoreState.teams.forEach((team, index) => {
       const btn = document.createElement('button');
       btn.className = 'score-team-btn';
-      
+
       if (index === activeTeamIndex) btn.classList.add('active');
-      
+
       const special = SCORE_SPECIAL_POINTS[team.score];
       let badgeHtml = '';
-      
+
       if (special === 'blitz') {
         btn.classList.add('blitz');
         badgeHtml = '<span class="score-badge">⚡ Блиц</span>';
@@ -285,6 +285,12 @@ function initScoreGame() {
 
   // --- МОДАЛКА БАЛЛОВ ---
   function openPointsModal(team, index) {
+    // ПРОВЕРКА: Если кликнули не по активной команде — выходим
+    if (index !== activeTeamIndex) {
+      if (navigator.vibrate) navigator.vibrate(50); // Легкая вибрация для понимания
+      return; 
+    }
+
     modalTeamName.textContent = team.name;
     pointsGrid.innerHTML = '';
 
@@ -358,7 +364,7 @@ const observer = new MutationObserver(() => {
     !overlay.classList.contains('hidden') || 
     !drawOverlay.classList.contains('hidden') ||
     scoreOverlays.some(el => el && !el.classList.contains('hidden'));
-    
+
   document.body.style.overflow = isAnyOverlayOpen ? 'hidden' : '';
 });
 
