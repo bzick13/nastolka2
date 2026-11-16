@@ -317,7 +317,7 @@ h1 {
     line-height: 1.1;
     white-space: nowrap;
   }
-  
+
   /* Адаптация табло под горизонтальный экран */
   #score-teams-list {
     flex-direction: row;
@@ -344,6 +344,12 @@ h1 {
 }
 
 /* ============ ПОДСЧЕТ БАЛЛОВ ============ */
+
+/* Кнопка "Подсчет баллов" на всю ширину */
+#score-game-btn {
+  grid-column: 1 / -1;
+  margin-top: 10px;
+}
 
 /* Экран настройки */
 #score-setup-overlay {
@@ -484,3 +490,10 @@ h1 {
 .score-points-grid .minus { background: #c62828; }
 .score-points-grid .plus { background: #2e7d32; }
 .score-points-grid .zero { background: #757575; }
+
+/* Чуть отступа для кнопки "Отмена" в модалке баллов */
+#score-modal-close {
+  margin-top: 10px;
+  width: 100%;
+  padding: 15px;
+}
