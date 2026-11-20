@@ -333,6 +333,12 @@ h1 {
     padding: 12px;
     font-size: 1.1rem;
   }
+  
+  /* Палитра в горизонтальном режиме */
+  #color-palette {
+    top: 55px; 
+    left: 10px;
+  }
 }
 
 @media (max-width: 480px) and (orientation: portrait) {
@@ -517,17 +523,19 @@ h1 {
 
 /* ============ ПАЛИТРА ЦВЕТОВ (РИСОВАНИЕ) ============ */
 #color-palette {
+  position: absolute;
+  top: 75px; /* Сдвигаем вниз, ровно под кнопками */
+  left: 16px; /* Выравниваем по левому краю с кнопками */
   display: flex;
-  gap: 6px;
+  gap: 8px;
   align-items: center;
-  margin-left: 10px;
-  flex-shrink: 0;
+  z-index: 10;
 }
 
 /* Перебиваем общие стили для кнопок палитры */
-#draw-toolbar .color-btn {
-  width: 32px !important;
-  height: 32px !important;
+#color-palette .color-btn {
+  width: 36px !important;
+  height: 36px !important;
   border-radius: 50% !important;
   border: 2px solid #ccc !important;
   cursor: pointer;
@@ -537,11 +545,11 @@ h1 {
   flex: 0 0 auto;
 }
 
-#draw-toolbar .color-btn:active {
+#color-palette .color-btn:active {
   transform: scale(0.9);
 }
 
-#draw-toolbar .color-btn.active {
+#color-palette .color-btn.active {
   border: 3px solid #333 !important;
   box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(0,0,0,0.3) !important;
 }
