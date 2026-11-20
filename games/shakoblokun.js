@@ -304,4 +304,10 @@ export function cleanup() {
   state.timerInterval = null;
   state.isRunning = false;
 
-  const overlay = document.getElementById('
+  const overlay = document.getElementById('shakoblokun-overlay');
+  if (overlay) {
+    overlay.classList.add('hidden');
+    const msg = document.getElementById('shako-message');
+    if (msg) msg.textContent = '';
+  }
+}
