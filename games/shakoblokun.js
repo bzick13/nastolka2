@@ -101,8 +101,14 @@ function launchGameScreen(currentGame) {
 
 /* Логика самой игры */
 function initGameLogic(currentGame) {
-  const currentWord = currentGame.currentItem.word;
-  const currentImage = currentGame.currentItem.image;
+  const item = currentGame?.currentItem;
+  if (!item || !item.word) {
+    console.error('Шлакоблокунь: нет слова!', currentGame);
+    return;
+  }
+
+  const currentWord = item.word;
+  const currentImage = item.image;
   const wordLen = currentWord.length;
 
   currentInput = Array(wordLen).fill('');
@@ -211,7 +217,7 @@ function initGameLogic(currentGame) {
       }
     });
 
-    if (currentInput.every(letter => letter !== '')) {
+    if (currentWord.length > 0 && currentInput.every(letter => letter !== '')) {
       checkWin();
     }
   }
