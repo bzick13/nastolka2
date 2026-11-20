@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nastolka-v7';
+const CACHE_NAME = 'nastolka-v8';
 const ASSETS = [
   './',
   './index.html',
@@ -12,7 +12,8 @@ const ASSETS = [
   './games/yesno.js',
   './games/blitz.js',
   './games/dice.js',
-  './games/rules.js'
+  './games/rules.js',
+  './games/shakoblokun.js' // Добавили новую игру
 ];
 
 /* ============ INSTALL ============ */
