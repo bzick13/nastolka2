@@ -518,27 +518,30 @@ h1 {
 /* ============ ПАЛИТРА ЦВЕТОВ (РИСОВАНИЕ) ============ */
 #color-palette {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
   margin-left: 10px;
+  flex-shrink: 0;
 }
 
-.color-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 2px solid #ccc;
+/* Перебиваем общие стили для кнопок палитры */
+#draw-toolbar .color-btn {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  border: 2px solid #ccc !important;
   cursor: pointer;
-  padding: 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  padding: 0 !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
   transition: transform 0.1s;
+  flex: 0 0 auto;
 }
 
-.color-btn:active {
+#draw-toolbar .color-btn:active {
   transform: scale(0.9);
 }
 
-.color-btn.active {
-  border: 3px solid #333;
-  box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(0,0,0,0.3);
+#draw-toolbar .color-btn.active {
+  border: 3px solid #333 !important;
+  box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(0,0,0,0.3) !important;
 }
