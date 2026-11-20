@@ -128,8 +128,13 @@ function initGameLogic(currentGame) {
   const messageEl = document.getElementById('shako-message');
   const timerEl = document.getElementById('shako-timer');
 
-  // Слоты
+  // --- ИСПРАВЛЕНИЕ: СБРОС СОСТОЯНИЯ ОТ ПРОШЛОЙ ИГРЫ ---
+  messageEl.textContent = '';
+  messageEl.style.color = '';
   slotsContainer.innerHTML = '';
+  keyboardContainer.innerHTML = '';
+
+  // Слоты
   for (let i = 0; i < wordLen; i++) {
     const slot = document.createElement('div');
     slot.className = 'shako-slot';
@@ -145,8 +150,6 @@ function initGameLogic(currentGame) {
   }
 
   // Клавиатура ЙЦУКЕН
-  keyboardContainer.innerHTML = '';
-
   const rows = [
     'ЙЦУКЕНГШЩЗХЪ',
     'ФЫВАПРОЛДЖЭ',
@@ -290,6 +293,12 @@ export function cleanup() {
   clearInterval(state.timerInterval);
   state.timerInterval = null;
   state.isRunning = false;
+  
   const overlay = document.getElementById('shakoblokun-overlay');
-  if (overlay) overlay.classList.add('hidden');
+  if (overlay) {
+    overlay.classList.add('hidden');
+    // На всякий случай чистим текст и при закрытии
+    const msg = document.getElementById('shako-message');
+    if (msg) msg.textContent = '';
+  }
 }
