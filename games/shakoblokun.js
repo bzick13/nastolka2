@@ -115,7 +115,10 @@ function initGameLogic(currentGame) {
   activeIndex = 0;
 
   const nextBtn = document.getElementById('shako-next-btn');
+  
+  // ЖЕСТКО СКРЫВАЕМ КНОПКУ В САМОМ НАЧАЛЕ
   nextBtn.classList.add('hidden');
+  nextBtn.style.display = 'none'; 
   nextBtn.textContent = 'Дальше';
 
   const imgEl = document.getElementById('shako-image');
@@ -128,7 +131,7 @@ function initGameLogic(currentGame) {
   const messageEl = document.getElementById('shako-message');
   const timerEl = document.getElementById('shako-timer');
 
-  // --- ИСПРАВЛЕНИЕ: СБРОС СОСТОЯНИЯ ОТ ПРОШЛОЙ ИГРЫ ---
+  // СБРОС СОСТОЯНИЯ ОТ ПРОШЛОЙ ИГРЫ
   messageEl.textContent = '';
   messageEl.style.color = '';
   slotsContainer.innerHTML = '';
@@ -234,7 +237,11 @@ function initGameLogic(currentGame) {
       messageEl.textContent = 'Правильно!';
       messageEl.style.color = '#2e7d32';
       nextBtn.textContent = 'Дальше';
+      
+      // ПОКАЗЫВАЕМ КНОПКУ ТОЛЬКО ЗДЕСЬ
       nextBtn.classList.remove('hidden');
+      nextBtn.style.display = 'flex'; 
+      
       clearInterval(state.timerInterval);
       state.timerInterval = null;
       signalStart();
@@ -269,7 +276,10 @@ function initGameLogic(currentGame) {
       messageEl.textContent = 'Время вышло! Слово: ' + currentWord;
       messageEl.style.color = '#c62828';
       nextBtn.textContent = 'Завершить';
+      
+      // ПОКАЗЫВАЕМ КНОПКУ ПО ТАЙМАУТУ
       nextBtn.classList.remove('hidden');
+      nextBtn.style.display = 'flex';
 
       document.querySelectorAll('.shako-key').forEach(btn => btn.onclick = null);
     }
@@ -293,12 +303,5 @@ export function cleanup() {
   clearInterval(state.timerInterval);
   state.timerInterval = null;
   state.isRunning = false;
-  
-  const overlay = document.getElementById('shakoblokun-overlay');
-  if (overlay) {
-    overlay.classList.add('hidden');
-    // На всякий случай чистим текст и при закрытии
-    const msg = document.getElementById('shako-message');
-    if (msg) msg.textContent = '';
-  }
-}
+
+  const overlay = document.getElementById('
