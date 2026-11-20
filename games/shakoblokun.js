@@ -83,8 +83,10 @@ function launchGameScreen(currentGame) {
     gameOverlay = document.createElement('div');
     gameOverlay.id = 'shakoblokun-overlay';
     gameOverlay.className = 'hidden';
+    // Кнопку "Дальше" перенесли в topbar
     gameOverlay.innerHTML = `
       <div id="shako-topbar">
+        <button id="shako-next-btn" class="btn green hidden">Дальше</button>
         <div id="shako-timer">60</div>
       </div>
       <div id="shako-content">
@@ -93,7 +95,6 @@ function launchGameScreen(currentGame) {
         </div>
         <div id="shako-word-slots"></div>
         <div id="shako-message"></div>
-        <button id="shako-next-btn" class="btn green hidden" style="margin: 10px auto;">Дальше</button>
       </div>
       <div id="shako-keyboard"></div>
     `;
@@ -115,16 +116,19 @@ function initGameLogic(currentGame) {
   currentInput = Array(wordLen).fill('');
   activeIndex = 0;
 
+  const nextBtn = document.getElementById('shako-next-btn');
+  nextBtn.classList.add('hidden'); // Прячем кнопку "Дальше" на старте
+  nextBtn.textContent = 'Дальше'; // Сброс текста (если было "Завершить")
+
   // Загружаем картинку (encodeURI защищает от проблем с русскими буквами)
   const imgEl = document.getElementById('shako-image');
   imgEl.src = encodeURI(currentImage);
   imgEl.style.display = 'block';
-  imgEl.onerror = () => { imgEl.style.display = 'none'; }; // Если картинки нет - просто прячем её
+  imgEl.onerror = () => { imgEl.style.display = 'none'; };
 
   const slotsContainer = document.getElementById('shako-word-slots');
   const keyboardContainer = document.getElementById('shako-keyboard');
   const messageEl = document.getElementById('shako-message');
-  const nextBtn = document.getElementById('shako-next-btn');
   const timerEl = document.getElementById('shako-timer');
 
   // Генерируем слоты (клетки) под длину слова
@@ -133,7 +137,6 @@ function initGameLogic(currentGame) {
     const slot = document.createElement('div');
     slot.className = 'shako-slot';
     slot.dataset.index = i;
-    // Клик по клетке стирает букву для исправления
     slot.onclick = () => {
       if (currentInput[i] !== '') {
         currentInput[i] = '';
@@ -154,17 +157,14 @@ function initGameLogic(currentGame) {
   ];
 
   rows.forEach((rowString, rowIndex) => {
-    // Создаем контейнер для ряда
     const rowDiv = document.createElement('div');
     rowDiv.className = 'shako-keyboard-row';
 
-    // Добавляем отступы для среднего ряда (как на реальной клавиатуре)
     if (rowIndex === 1) {
       rowDiv.style.paddingLeft = '4%';
       rowDiv.style.paddingRight = '4%';
     }
 
-    // Генерируем кнопки для букв
     rowString.split('').forEach(letter => {
       const key = document.createElement('button');
       key.className = 'shako-key';
@@ -173,7 +173,6 @@ function initGameLogic(currentGame) {
       rowDiv.appendChild(key);
     });
 
-    // Если это последний ряд, добавляем кнопку стирания
     if (rowIndex === 2) {
       const backspaceKey = document.createElement('button');
       backspaceKey.className = 'shako-key shako-key-backspace';
@@ -196,7 +195,6 @@ function initGameLogic(currentGame) {
 
   function handleKeyPress(letter) {
     let targetIndex = -1;
-    // Ищем, куда вписать букву (в активную клетку или в первую свободную)
     if (currentInput[activeIndex] === '') {
       targetIndex = activeIndex;
     } else {
@@ -217,13 +215,11 @@ function initGameLogic(currentGame) {
       slot.textContent = currentInput[index];
       slot.classList.remove('correct', 'wrong', 'active');
 
-      // Подсвечиваем клетку, куда будем писать
       if (index === activeIndex && currentInput[index] === '') {
         slot.classList.add('active');
       }
     });
 
-    // Если все клетки заполнены, проверяем слово
     if (currentInput.every(letter => letter !== '')) {
       checkWin();
     }
@@ -234,7 +230,6 @@ function initGameLogic(currentGame) {
     const slots = document.querySelectorAll('.shako-slot');
 
     if (guess === currentWord) {
-      // ПОБЕДА
       slots.forEach(slot => slot.classList.add('correct'));
       messageEl.textContent = 'Правильно!';
       messageEl.style.color = '#2e7d32';
@@ -242,12 +237,10 @@ function initGameLogic(currentGame) {
       clearInterval(state.timerInterval);
       signalStart();
     } else {
-      // ОШИБКА
       slots.forEach(slot => slot.classList.add('wrong'));
       messageEl.textContent = 'Неправильно. Попробуйте еще раз!';
       messageEl.style.color = '#c62828';
 
-      // Через секунду убираем красный цвет (буквы остаются, клавиатура не блокируется)
       setTimeout(() => {
         slots.forEach(slot => slot.classList.remove('wrong'));
         messageEl.textContent = '';
@@ -276,7 +269,6 @@ function initGameLogic(currentGame) {
       nextBtn.textContent = 'Завершить';
       nextBtn.classList.remove('hidden');
 
-      // Блокируем клавиатуру
       document.querySelectorAll('.shako-key').forEach(btn => btn.onclick = null);
     }
   }, 1000);
