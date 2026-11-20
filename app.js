@@ -97,7 +97,7 @@ export function hideTimerAndStart() {
 
 export function showTimerAndStart(value) {
   timerDisplay.classList.remove('hidden');
-  timerDisplay.textContent = value;
+  timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${value}`;
   startBtn.classList.remove('hidden');
 }
 
