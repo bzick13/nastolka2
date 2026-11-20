@@ -115,7 +115,7 @@ function initGameLogic(currentGame) {
   activeIndex = 0;
 
   const nextBtn = document.getElementById('shako-next-btn');
-  
+
   // ЖЕСТКО СКРЫВАЕМ КНОПКУ В САМОМ НАЧАЛЕ
   nextBtn.classList.add('hidden');
   nextBtn.style.display = 'none'; 
@@ -143,11 +143,13 @@ function initGameLogic(currentGame) {
     slot.className = 'shako-slot';
     slot.dataset.index = i;
     slot.onclick = () => {
+      // Если ячейка заполнена, стираем букву
       if (currentInput[i] !== '') {
         currentInput[i] = '';
-        activeIndex = i;
-        updateSlots();
       }
+      // В любом случае делаем эту ячейку активной
+      activeIndex = i;
+      updateSlots();
     };
     slotsContainer.appendChild(slot);
   }
@@ -198,16 +200,22 @@ function initGameLogic(currentGame) {
 
   function handleKeyPress(letter) {
     let targetIndex = -1;
+
+    // Если активная ячейка пуста, ставим букву именно туда
     if (currentInput[activeIndex] === '') {
       targetIndex = activeIndex;
     } else {
+      // Иначе ищем первую пустую ячейку
       targetIndex = currentInput.indexOf('');
     }
 
     if (targetIndex !== -1) {
       currentInput[targetIndex] = letter;
       activeIndex = targetIndex + 1;
+      
+      // Если дошли до конца, останавливаемся на последней ячейке
       if (activeIndex >= wordLen) activeIndex = wordLen - 1;
+      
       updateSlots();
     }
   }
@@ -218,7 +226,8 @@ function initGameLogic(currentGame) {
       slot.textContent = currentInput[index];
       slot.classList.remove('correct', 'wrong', 'active');
 
-      if (index === activeIndex && currentInput[index] === '') {
+      // Подсвечиваем активную ячейку
+      if (index === activeIndex) {
         slot.classList.add('active');
       }
     });
@@ -237,11 +246,11 @@ function initGameLogic(currentGame) {
       messageEl.textContent = 'Правильно!';
       messageEl.style.color = '#2e7d32';
       nextBtn.textContent = 'Дальше';
-      
+
       // ПОКАЗЫВАЕМ КНОПКУ ТОЛЬКО ЗДЕСЬ
       nextBtn.classList.remove('hidden');
       nextBtn.style.display = 'flex'; 
-      
+
       clearInterval(state.timerInterval);
       state.timerInterval = null;
       signalStart();
@@ -276,7 +285,7 @@ function initGameLogic(currentGame) {
       messageEl.textContent = 'Время вышло! Слово: ' + currentWord;
       messageEl.style.color = '#c62828';
       nextBtn.textContent = 'Завершить';
-      
+
       // ПОКАЗЫВАЕМ КНОПКУ ПО ТАЙМАУТУ
       nextBtn.classList.remove('hidden');
       nextBtn.style.display = 'flex';
