@@ -611,14 +611,24 @@ h1 {
   overflow-y: auto;
 }
 
+/* Topbar: кнопка "Дальше" слева, таймер справа, высота фиксирована */
 #shako-topbar {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
   padding: 10px 20px;
+  min-height: 60px; /* фиксируем высоту — клавиатура не съезжает */
 }
 
+/* Кнопка "Дальше"/"Завершить" — первая в DOM, значит слева */
+#shako-next-btn {
+  /* без спец. стилей, .btn green уже есть */
+}
+
+/* Таймер всегда справа, даже когда кнопки нет */
 #shako-timer {
+  margin-left: auto;
   font-size: 2rem;
   font-weight: bold;
   color: #c62828;
