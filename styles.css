@@ -621,9 +621,15 @@ h1 {
   min-height: 60px; /* фиксируем высоту — клавиатура не съезжает */
 }
 
-/* Кнопка "Дальше"/"Завершить" — первая в DOM, значит слева */
+/* Кнопка "Дальше"/"Завершить" — делаем размер как у таймера */
 #shako-next-btn {
-  /* без спец. стилей, .btn green уже есть */
+  padding: 5px 15px !important;
+  font-size: 1.3rem !important; /* Чуть меньше, чтобы влезло */
+  border-radius: 12px !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important; /* Тень как у таймера */
+  margin: 0 !important;
+  height: auto !important;
+  line-height: normal !important;
 }
 
 /* Таймер всегда справа, даже когда кнопки нет */
@@ -738,15 +744,16 @@ h1 {
   width: 100%;
 }
 
+/* Увеличенные клавиши, тянутся на всю ширину */
 .shako-key {
   flex: 1;
-  max-width: 45px;
-  height: 45px;
+  max-width: none; /* Убираем ограничение в 45px */
+  height: 55px;    /* Увеличиваем высоту */
   border: none;
   border-radius: 8px;
   background: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  font-size: 1rem;
+  font-size: 1.2rem; /* Увеличиваем шрифт */
   font-weight: bold;
   color: #1565c0;
   cursor: pointer;
@@ -764,5 +771,5 @@ h1 {
   flex: 1.5;
   background: #c62828;
   color: #fff;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
 }
