@@ -604,11 +604,10 @@ h1 {
   min-height: 60px;
 }
 
-/* Кнопка "Дальше" — подгоняем под размер таймера */
+/* Кнопка "Дальше" — убираем display: flex !important, чтобы .hidden работал */
 #shako-next-btn {
   height: 48px !important;
   padding: 0 20px !important;
-  display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   font-size: 1.3rem !important;
