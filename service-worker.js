@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nastolka-v6';
+const CACHE_NAME = 'nastolka-v7';
 const ASSETS = [
   './',
   './index.html',
