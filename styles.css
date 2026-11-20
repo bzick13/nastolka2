@@ -1,40 +1,49 @@
-/* Topbar */
-#shako-topbar {
+/* Контейнер клавиатуры */
+#shako-keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   width: 100%;
+  max-width: 500px; /* Ограничиваем ширину, чтобы клавиши не были слишком широкими */
+  margin: 15px auto;
+  padding: 0 10px 20px 10px;
+  align-items: center;
+}
+
+/* Ряды клавиатуры */
+.shako-keyboard-row {
+  display: flex;
+  gap: 5px; /* Небольшой отступ между клавишами, как на картинке */
+  justify-content: center;
+  width: 100%;
+}
+
+/* Клавиши */
+.shako-key {
+  flex: 1; /* Растягиваются равномерно */
+  height: 60px; /* Делаем их вытянутыми по вертикали */
+  border: none;
+  border-radius: 12px; /* Скругление как на картинке */
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1565c0;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 20px;
-  min-height: 60px;
+  justify-content: center;
+  padding: 0;
 }
 
-/* Кнопка "Дальше" — жестко задаем высоту и центрируем текст */
-#shako-next-btn {
-  height: 48px !important;       /* Фиксируем высоту */
-  padding: 0 20px !important;    /* Убираем вертикальные отступы, оставляем горизонтальные */
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 1.3rem !important;
-  border-radius: 12px !important;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
+.shako-key:active {
+  background: #bbdefb;
 }
 
-/* Таймер — задаем точно такую же высоту */
-#shako-timer {
-  height: 48px !important;       /* Та же высота, что и у кнопки */
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 15px !important;    /* Убираем вертикальные отступы */
-  box-sizing: border-box !important;
-  margin-left: auto;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #c62828;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+/* Кнопка "Стереть" (⌫) */
+.shako-key-backspace {
+  flex: 1; /* Убираем 1.5, теперь она такой же ширины, как и буквы */
+  background: #c62828;
+  color: #fff;
+  font-size: 1.4rem;
 }
