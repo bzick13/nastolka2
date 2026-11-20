@@ -8,7 +8,6 @@ export const META = {
   label: 'Шлакоблокунь',
   time: 60,
   points: 3,
-  // Пути к картинкам ведут в твою папку image
   words: [
     { word: 'БЕГЕМОТЫГА', image: 'image/Бегемотыга.jpg' },
     { word: 'КАШАЛОТОС', image: 'image/Кашалотос.jpg' },
@@ -23,7 +22,6 @@ let activeIndex = 0;
 
 /* Открытие (модальное окно с правилами) */
 export function open(currentGame) {
-  // Выбираем случайное слово и картинку
   currentGame.currentItem = rand(META.words);
 
   content.innerHTML = `
@@ -44,12 +42,10 @@ function start(currentGame) {
   if (state.isRunning) return;
   state.isRunning = true;
 
-  // Прячем кнопки в модалке
   startBtn.classList.add('hidden');
   closeBtn.classList.add('hidden');
   timerDisplay.classList.add('hidden');
 
-  // Обратный отсчет 3, 2, 1, Старт
   let count = 3;
   content.innerHTML = `<div class="countdown">${count}</div>`;
 
@@ -62,9 +58,8 @@ function start(currentGame) {
       content.innerHTML = `<div class="countdown">1</div>`;
     } else if (count === 0) {
       content.innerHTML = `<div class="countdown">Старт!</div>`;
-      signalStart(); 
+      signalStart();
     } else if (count === -1) {
-      // Отсчет окончен, открываем игру
       clearInterval(state.countdownInterval);
       state.countdownInterval = null;
       launchGameScreen(currentGame);
@@ -74,16 +69,13 @@ function start(currentGame) {
 
 /* Открытие полноэкранной игры */
 function launchGameScreen(currentGame) {
-  // Скрываем стандартную модалку
   document.getElementById('overlay').classList.add('hidden');
 
-  // Создаем оверлей, если его еще нет
   let gameOverlay = document.getElementById('shakoblokun-overlay');
   if (!gameOverlay) {
     gameOverlay = document.createElement('div');
     gameOverlay.id = 'shakoblokun-overlay';
     gameOverlay.className = 'hidden';
-    // Кнопку "Дальше" перенесли в topbar
     gameOverlay.innerHTML = `
       <div id="shako-topbar">
         <button id="shako-next-btn" class="btn green hidden">Дальше</button>
@@ -117,10 +109,9 @@ function initGameLogic(currentGame) {
   activeIndex = 0;
 
   const nextBtn = document.getElementById('shako-next-btn');
-  nextBtn.classList.add('hidden'); // Прячем кнопку "Дальше" на старте
-  nextBtn.textContent = 'Дальше'; // Сброс текста (если было "Завершить")
+  nextBtn.classList.add('hidden');
+  nextBtn.textContent = 'Дальше';
 
-  // Загружаем картинку (encodeURI защищает от проблем с русскими буквами)
   const imgEl = document.getElementById('shako-image');
   imgEl.src = encodeURI(currentImage);
   imgEl.style.display = 'block';
@@ -131,7 +122,7 @@ function initGameLogic(currentGame) {
   const messageEl = document.getElementById('shako-message');
   const timerEl = document.getElementById('shako-timer');
 
-  // Генерируем слоты (клетки) под длину слова
+  // Слоты
   slotsContainer.innerHTML = '';
   for (let i = 0; i < wordLen; i++) {
     const slot = document.createElement('div');
@@ -147,7 +138,7 @@ function initGameLogic(currentGame) {
     slotsContainer.appendChild(slot);
   }
 
-  // Генерируем клавиатуру (стандартная раскладка ЙЦУКЕН)
+  // Клавиатура ЙЦУКЕН
   keyboardContainer.innerHTML = '';
 
   const rows = [
@@ -233,8 +224,10 @@ function initGameLogic(currentGame) {
       slots.forEach(slot => slot.classList.add('correct'));
       messageEl.textContent = 'Правильно!';
       messageEl.style.color = '#2e7d32';
+      nextBtn.textContent = 'Дальше';
       nextBtn.classList.remove('hidden');
       clearInterval(state.timerInterval);
+      state.timerInterval = null;
       signalStart();
     } else {
       slots.forEach(slot => slot.classList.add('wrong'));
@@ -252,7 +245,7 @@ function initGameLogic(currentGame) {
     endRound();
   };
 
-  // Запуск таймера игры
+  // Таймер игры
   let left = META.time;
   timerEl.textContent = left;
   timerEl.style.color = '#c62828';
@@ -278,6 +271,7 @@ function initGameLogic(currentGame) {
     if (overlay) overlay.classList.add('hidden');
     state.isRunning = false;
     clearInterval(state.timerInterval);
+    state.timerInterval = null;
 
     startBtn.classList.remove('hidden');
     closeBtn.classList.remove('hidden');
@@ -287,6 +281,9 @@ function initGameLogic(currentGame) {
 }
 
 export function cleanup() {
+  clearInterval(state.timerInterval);
+  state.timerInterval = null;
+  state.isRunning = false;
   const overlay = document.getElementById('shakoblokun-overlay');
   if (overlay) overlay.classList.add('hidden');
 }
