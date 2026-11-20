@@ -41,7 +41,8 @@ export function open(currentGame) {
     <div class="points">Баллы: ${META.points}</div>
   `;
   timerDisplay.classList.remove('hidden');
-  timerDisplay.textContent = META.time;
+  // ИСПРАВЛЕНИЕ: Выводим слово "Время:"
+  timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${META.time}`;
   showModalButtons();
   startBtn.classList.remove('hidden');
   startBtn.onclick = () => start(currentGame);
@@ -147,7 +148,8 @@ function endRound(currentGame) {
     <div class="word">${currentGame.currentWord}</div>
     <div class="points">Баллы: ${META.points}</div>
   `;
-  timerDisplay.textContent = '0';
+  // ИСПРАВЛЕНИЕ: Выводим слово "Время:" в конце
+  timerDisplay.innerHTML = `<span class="timer-label">Время:</span> 0`;
   timerDisplay.classList.remove('hidden');
   showModalButtons();
   startBtn.classList.add('hidden');
@@ -174,7 +176,6 @@ function onStart(e) {
   ctx.moveTo(p.x, p.y);
 
   // 🔑 ИСПРАВЛЕНИЕ: Рисуем точку той же толщины, что и линия
-  // Делаем крошечный отрезок, чтобы Canvas отрисовал круг (за счет lineCap: 'round')
   ctx.lineTo(p.x + 0.1, p.y + 0.1);
   ctx.stroke();
   ctx.beginPath();
