@@ -47,7 +47,8 @@ export function open(currentGame) {
     <div class="points">Баллы: ${META.points}</div>
   `;
   timerDisplay.classList.remove('hidden');
-  timerDisplay.textContent = META.time;
+  // ИСПРАВЛЕНИЕ: Добавляем слово "Время:"
+  timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${META.time}`;
   showModalButtons();
   startBtn.classList.remove('hidden');
   startBtn.onclick = () => start(currentGame);
@@ -84,16 +85,18 @@ function start(currentGame) {
 
 function startTimer() {
   let left = META.time;
-  timerDisplay.textContent = left;
+  // ИСПРАВЛЕНИЕ: Добавляем слово "Время:"
+  timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${left}`;
   timerDisplay.classList.remove('hidden');
 
   state.timerInterval = setInterval(() => {
     left--;
-    timerDisplay.textContent = left;
+    // ИСПРАВЛЕНИЕ: Сохраняем слово "Время:" при отсчете
+    timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${left}`;
     if (left <= 0) {
       clearInterval(state.timerInterval);
       state.timerInterval = null;
-      timerDisplay.textContent = '0';
+      timerDisplay.innerHTML = `<span class="timer-label">Время:</span> 0`;
       signalEnd();
       state.isRunning = false;
     }
