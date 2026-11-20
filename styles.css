@@ -506,3 +506,11 @@ h1 {
   width: 100%;
   padding: 15px;
 }
+
+/* Подпись к таймеру (слово "Время:") */
+.timer-label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2e7d32; /* Зеленый цвет, как у баллов */
+  margin-right: 4px;
+}
