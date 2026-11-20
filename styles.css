@@ -602,12 +602,12 @@ h1 {
 #shakoblokun-overlay {
   position: fixed;
   inset: 0;
-  background: #e3f2fd; /* Светло-голубой фон приложения */
+  background: #e3f2fd;
   z-index: 250;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px;
+  padding: 10px;
   overflow-y: auto;
 }
 
@@ -634,12 +634,12 @@ h1 {
   align-items: center;
   width: 100%;
   max-width: 500px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 #shako-image-container {
-  width: 100%;
-  max-width: 300px;
+  width: 90%;
+  max-width: 350px;
   aspect-ratio: 1 / 1;
   background: #fff;
   border-radius: 20px;
@@ -654,7 +654,7 @@ h1 {
 #shako-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* Картинка будет вписываться полностью, без обрезки */
 }
 
 #shako-word-slots {
@@ -663,11 +663,15 @@ h1 {
   margin-bottom: 20px;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  padding: 0 10px;
 }
 
 .shako-slot {
-  width: 40px;
-  height: 40px;
+  flex: 1;
+  min-width: 25px;
+  max-width: 45px;
+  height: 45px;
   border-radius: 8px;
   background: #fff;
   border: 2px solid #ccc;
@@ -687,37 +691,46 @@ h1 {
 }
 
 .shako-slot.correct {
-  background: #a5d6a7; /* Светло-зеленый */
+  background: #a5d6a7;
   border-color: #2e7d32;
   color: #1b5e20;
 }
 
 .shako-slot.wrong {
-  background: #ef9a9a; /* Светло-красный */
+  background: #ef9a9a;
   border-color: #c62828;
   color: #b71c1c;
 }
 
 #shako-message {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 10px;
   min-height: 24px;
+  text-align: center;
 }
 
 #shako-keyboard {
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
   width: 100%;
   max-width: 600px;
-  margin-top: 20px;
-  padding-bottom: 20px;
+  margin-top: 15px;
+  padding: 0 10px 20px 10px;
+  align-items: center;
+}
+
+.shako-keyboard-row {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  width: 100%;
 }
 
 .shako-key {
-  width: 35px;
+  flex: 1;
+  max-width: 45px;
   height: 45px;
   border: none;
   border-radius: 8px;
@@ -727,9 +740,19 @@ h1 {
   font-weight: bold;
   color: #1565c0;
   cursor: pointer;
-  transition: background 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 .shako-key:active {
   background: #bbdefb;
+}
+
+.shako-key-backspace {
+  flex: 1.5;
+  background: #c62828;
+  color: #fff;
+  font-size: 1.2rem;
 }
