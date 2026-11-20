@@ -27,10 +27,12 @@ export const META = {
 let ctx = null;
 let eraserMode = false;
 let drawing = false;
+let currentColor = '#000000'; // Текущий цвет кисти
 
 const clearBtn = document.getElementById('clear-btn');
 const eraserBtn = document.getElementById('eraser-btn');
 const doneBtn = document.getElementById('done-btn');
+const colorBtns = document.querySelectorAll('.color-btn');
 
 /* Открытие */
 export function open(currentGame) {
@@ -41,7 +43,6 @@ export function open(currentGame) {
     <div class="points">Баллы: ${META.points}</div>
   `;
   timerDisplay.classList.remove('hidden');
-  // ИСПРАВЛЕНИЕ: Выводим слово "Время:"
   timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${META.time}`;
   showModalButtons();
   startBtn.classList.remove('hidden');
@@ -70,13 +71,24 @@ function start(currentGame) {
 
   eraserMode = false;
   drawing = false;
+  currentColor = '#000000'; // Сброс цвета на черный
   eraserBtn.classList.remove('active');
+  
+  // Сброс выделения палитры (первый цвет активен)
+  colorBtns.forEach(btn => btn.classList.remove('active'));
+  if(colorBtns[0]) colorBtns[0].classList.add('active');
+
   applyBrush();
 
-  // Навешиваем обработчики кнопок СРАЗУ — «Готово» работает и во время отсчёта
+  // Навешиваем обработчики
   clearBtn.addEventListener('click', onClear);
   eraserBtn.addEventListener('click', onToggleEraser);
   doneBtn.addEventListener('click', onDone);
+  
+  // Обработчики для кнопок палитры
+  colorBtns.forEach(btn => {
+    btn.addEventListener('click', onColorChange);
+  });
 
   // Рисование — только после отсчёта
   let count = 3;
@@ -105,7 +117,7 @@ function applyBrush() {
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 30;
   } else {
-    ctx.strokeStyle = '#000';
+    ctx.strokeStyle = currentColor; // Используем выбранный цвет
     ctx.lineWidth = 4;
   }
   ctx.lineCap = 'round';
@@ -129,7 +141,7 @@ function startDrawTimer(currentGame) {
   }, 1000);
 }
 
-/* Завершение раунда — вызывается и по таймеру, и по кнопке «Готово» */
+/* Завершение раунда */
 function endRound(currentGame) {
   clearInterval(state.timerInterval);
   clearInterval(state.countdownInterval);
@@ -148,7 +160,6 @@ function endRound(currentGame) {
     <div class="word">${currentGame.currentWord}</div>
     <div class="points">Баллы: ${META.points}</div>
   `;
-  // ИСПРАВЛЕНИЕ: Выводим слово "Время:" в конце
   timerDisplay.innerHTML = `<span class="timer-label">Время:</span> 0`;
   timerDisplay.classList.remove('hidden');
   showModalButtons();
@@ -175,7 +186,7 @@ function onStart(e) {
   ctx.beginPath();
   ctx.moveTo(p.x, p.y);
 
-  // 🔑 ИСПРАВЛЕНИЕ: Рисуем точку той же толщины, что и линия
+  // Рисуем точку той же толщины, что и линия
   ctx.lineTo(p.x + 0.1, p.y + 0.1);
   ctx.stroke();
   ctx.beginPath();
@@ -207,16 +218,42 @@ function onToggleEraser(e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
   eraserMode = !eraserMode;
   eraserBtn.classList.toggle('active', eraserMode);
+  
+  // Если выбрали стёрку, снимаем выделение с цветов
+  if (eraserMode) {
+    colorBtns.forEach(btn => btn.classList.remove('active'));
+  } else {
+    // Если вернулись к рисованию, подсвечиваем текущий цвет
+    colorBtns.forEach(btn => {
+      if (btn.dataset.color === currentColor) btn.classList.add('active');
+    });
+  }
+  
   applyBrush();
 }
 
-/* 🔑 Готово */
+function onColorChange(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  const btn = e.currentTarget;
+  currentColor = btn.dataset.color;
+  
+  // Отключаем стёрку, если выбрали цвет
+  eraserMode = false;
+  eraserBtn.classList.remove('active');
+  
+  // Подсветка выбранного цвета
+  colorBtns.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  applyBrush();
+}
+
+/* Готово */
 function onDone(e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
-  if (!state.isRunning) return;          // уже завершили — игнорируем
+  if (!state.isRunning) return;
   if (!state.currentGame) return;
 
-  // прерываем текущую линию, чтобы после «Готово» ничего не дорисовывалось
   drawing = false;
   if (ctx) ctx.beginPath();
 
@@ -253,6 +290,10 @@ function removeDrawingListeners() {
   clearBtn.removeEventListener('click', onClear);
   eraserBtn.removeEventListener('click', onToggleEraser);
   doneBtn.removeEventListener('click', onDone);
+  
+  colorBtns.forEach(btn => {
+    btn.removeEventListener('click', onColorChange);
+  });
 
   drawing = false;
 }
