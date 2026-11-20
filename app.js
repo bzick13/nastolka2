@@ -184,7 +184,8 @@ function initScoreGame() {
   // Если кнопки нет на странице, прерываем инициализацию (защита от ошибок)
   if (!scoreGameBtn) return;
 
-  const DEFAULT_COLORS = ['#1565c0', '#c62828', '#2e7d32', '#f57c00'];
+  // ИСПРАВЛЕНИЕ: Добавлены цвета для 5 и 6 команды
+  const DEFAULT_COLORS = ['#1565c0', '#c62828', '#2e7d32', '#f57c00', '#8e24aa', '#00838f'];
   let scoreState = null;
   let activeTeamIndex = 0;
 
