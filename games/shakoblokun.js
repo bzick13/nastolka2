@@ -43,19 +43,19 @@ export function open(currentGame) {
 function start(currentGame) {
   if (state.isRunning) return;
   state.isRunning = true;
-  
+
   // Прячем кнопки в модалке
   startBtn.classList.add('hidden');
   closeBtn.classList.add('hidden');
   timerDisplay.classList.add('hidden');
-  
+
   // Обратный отсчет 3, 2, 1, Старт
   let count = 3;
   content.innerHTML = `<div class="countdown">${count}</div>`;
 
   state.countdownInterval = setInterval(() => {
     count--;
-    
+
     if (count === 2) {
       content.innerHTML = `<div class="countdown">2</div>`;
     } else if (count === 1) {
@@ -76,7 +76,7 @@ function start(currentGame) {
 function launchGameScreen(currentGame) {
   // Скрываем стандартную модалку
   document.getElementById('overlay').classList.add('hidden');
-  
+
   // Создаем оверлей, если его еще нет
   let gameOverlay = document.getElementById('shakoblokun-overlay');
   if (!gameOverlay) {
@@ -144,16 +144,54 @@ function initGameLogic(currentGame) {
     slotsContainer.appendChild(slot);
   }
 
-  // Генерируем клавиатуру
-  const russianAlphabet = 'ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ';
+  // Генерируем клавиатуру (стандартная раскладка ЙЦУКЕН)
   keyboardContainer.innerHTML = '';
-  
-  russianAlphabet.split('').forEach(letter => {
-    const key = document.createElement('button');
-    key.className = 'shako-key';
-    key.textContent = letter;
-    key.onclick = () => handleKeyPress(letter);
-    keyboardContainer.appendChild(key);
+
+  const rows = [
+    'ЙЦУКЕНГШЩЗХЪ',
+    'ФЫВАПРОЛДЖЭ',
+    'ЯЧСМИТЬБЮ'
+  ];
+
+  rows.forEach((rowString, rowIndex) => {
+    // Создаем контейнер для ряда
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'shako-keyboard-row';
+
+    // Добавляем отступы для среднего ряда (как на реальной клавиатуре)
+    if (rowIndex === 1) {
+      rowDiv.style.paddingLeft = '4%';
+      rowDiv.style.paddingRight = '4%';
+    }
+
+    // Генерируем кнопки для букв
+    rowString.split('').forEach(letter => {
+      const key = document.createElement('button');
+      key.className = 'shako-key';
+      key.textContent = letter;
+      key.onclick = () => handleKeyPress(letter);
+      rowDiv.appendChild(key);
+    });
+
+    // Если это последний ряд, добавляем кнопку стирания
+    if (rowIndex === 2) {
+      const backspaceKey = document.createElement('button');
+      backspaceKey.className = 'shako-key shako-key-backspace';
+      backspaceKey.textContent = '⌫';
+      backspaceKey.onclick = () => {
+        if (currentInput[activeIndex] !== '') {
+          currentInput[activeIndex] = '';
+          updateSlots();
+        } else if (activeIndex > 0) {
+          activeIndex--;
+          currentInput[activeIndex] = '';
+          updateSlots();
+        }
+      };
+      rowDiv.appendChild(backspaceKey);
+    }
+
+    keyboardContainer.appendChild(rowDiv);
   });
 
   function handleKeyPress(letter) {
@@ -178,7 +216,7 @@ function initGameLogic(currentGame) {
     slots.forEach((slot, index) => {
       slot.textContent = currentInput[index];
       slot.classList.remove('correct', 'wrong', 'active');
-      
+
       // Подсвечиваем клетку, куда будем писать
       if (index === activeIndex && currentInput[index] === '') {
         slot.classList.add('active');
@@ -208,7 +246,7 @@ function initGameLogic(currentGame) {
       slots.forEach(slot => slot.classList.add('wrong'));
       messageEl.textContent = 'Неправильно. Попробуйте еще раз!';
       messageEl.style.color = '#c62828';
-      
+
       // Через секунду убираем красный цвет (буквы остаются, клавиатура не блокируется)
       setTimeout(() => {
         slots.forEach(slot => slot.classList.remove('wrong'));
@@ -237,7 +275,7 @@ function initGameLogic(currentGame) {
       messageEl.style.color = '#c62828';
       nextBtn.textContent = 'Завершить';
       nextBtn.classList.remove('hidden');
-      
+
       // Блокируем клавиатуру
       document.querySelectorAll('.shako-key').forEach(btn => btn.onclick = null);
     }
@@ -248,10 +286,10 @@ function initGameLogic(currentGame) {
     if (overlay) overlay.classList.add('hidden');
     state.isRunning = false;
     clearInterval(state.timerInterval);
-    
+
     startBtn.classList.remove('hidden');
     closeBtn.classList.remove('hidden');
-    
+
     closeOverlay();
   }
 }
