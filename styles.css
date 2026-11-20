@@ -210,7 +210,7 @@ h1 {
   top: 10px;
   left: 16px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* ВЫСТРАИВАЕМ В СТОЛБИК */
   gap: 10px;
   z-index: 10;
 }
@@ -250,6 +250,7 @@ h1 {
 #done-btn { background: #2e7d32; }
 #done-btn:hover { background: #388e3c; }
 
+/* Стили для кнопки цвета с кружком */
 #color-picker-btn {
   display: flex;
   align-items: center;
@@ -274,6 +275,7 @@ h1 {
   cursor: crosshair;
 }
 
+/* Countdown */
 .countdown {
   font-size: 5rem;
   font-weight: 800;
@@ -331,7 +333,7 @@ h1 {
     top: 6px;
     left: 10px;
     gap: 6px;
-    flex-direction: row;
+    flex-direction: row; /* В горизонтальном режиме снова в строку */
   }
 
   #draw-toolbar button {
@@ -341,6 +343,7 @@ h1 {
     white-space: nowrap;
   }
 
+  /* Адаптация табло под горизонтальный экран */
   #score-teams-list {
     flex-direction: row;
     flex-wrap: wrap;
@@ -358,7 +361,7 @@ h1 {
     top: 8px;
     left: 10px;
     gap: 8px;
-    flex-direction: column !important;
+    flex-direction: column !important; /* Принудительный столбик на телефонах */
   }
   #draw-toolbar button {
     padding: 8px 12px;
@@ -368,15 +371,18 @@ h1 {
 
 /* ============ ПОДСЧЕТ БАЛЛОВ ============ */
 
+/* Кнопка "Подсчет баллов" на всю ширину */
 #score-game-btn {
   grid-column: 1 / -1;
   margin-top: 10px;
 }
 
+/* Кнопка "Блиц" на всю ширину */
 #blitz-btn {
   grid-column: 1 / -1;
 }
 
+/* Экран настройки */
 #score-setup-overlay {
   position: fixed;
   inset: 0;
@@ -414,6 +420,7 @@ h1 {
 }
 .modal-buttons-row .btn { flex: 1; padding: 16px; }
 
+/* Экран табло */
 #score-board-overlay {
   position: fixed;
   inset: 0;
@@ -435,6 +442,7 @@ h1 {
   margin: 0 auto; flex: 1;
 }
 
+/* Кнопки команд */
 .score-team-btn {
   display: flex;
   flex-direction: column;
@@ -455,20 +463,24 @@ h1 {
 }
 .score-team-btn:active { transform: scale(0.98); }
 
+/* Активная команда (чей ход) */
 .score-team-btn.active {
-  border-color: #ffeb3b;
+  border-color: #ffeb3b; /* Желтая рамка */
   box-shadow: 0 0 15px rgba(255, 235, 59, 0.8), 0 4px 10px rgba(0,0,0,0.2);
   transform: scale(1.02);
 }
 
+/* Блиц (10, 20) */
 .score-team-btn.blitz {
-  background: #fbc02d !important;
+  background: #fbc02d !important; /* Желтый */
   color: #333 !important;
 }
+/* Усложнение (5, 15, 25) */
 .score-team-btn.hard {
-  background: #795548 !important;
+  background: #795548 !important; /* Коричневый */
 }
 
+/* Подписи Блиц / Усложнение */
 .score-badge {
   font-size: 0.9rem;
   margin-top: 8px;
@@ -479,11 +491,13 @@ h1 {
   text-transform: uppercase;
 }
 
+/* Кнопка Завершить ход */
 .score-end-turn {
   width: 100%; max-width: 600px; margin: 20px auto 0 auto;
   padding: 20px; font-size: 1.3rem; border-radius: 16px;
 }
 
+/* Модалка выбора баллов */
 #score-points-modal {
   position: fixed; inset: 0; background: rgba(0,0,0,0.6);
   display: flex; align-items: center; justify-content: center; z-index: 350; padding: 20px;
@@ -503,20 +517,23 @@ h1 {
 }
 .score-points-grid button:active { transform: scale(0.95); }
 
+/* Цвета кнопок баллов */
 .score-points-grid .minus { background: #c62828; }
 .score-points-grid .plus { background: #2e7d32; }
 .score-points-grid .zero { background: #757575; }
 
+/* Чуть отступа для кнопки "Отмена" в модалке баллов */
 #score-modal-close {
   margin-top: 10px;
   width: 100%;
   padding: 15px;
 }
 
+/* Подпись к таймеру (слово "Время:") */
 .timer-label {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #2e7d32;
+  color: #2e7d32; /* Зеленый цвет, как у баллов */
   margin-right: 4px;
 }
 
@@ -549,7 +566,7 @@ h1 {
 
 #color-palette {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, 1fr); /* 5 колонок */
   gap: 10px;
   margin-bottom: 20px;
   justify-items: center;
@@ -594,15 +611,17 @@ h1 {
   overflow-y: auto;
 }
 
+/* Topbar: кнопка "Дальше" слева, таймер справа */
 #shako-topbar {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px;
-  min-height: 60px;
+  min-height: 60px; /* Фиксируем высоту */
 }
 
+/* Кнопка "Дальше" — подгоняем под размер таймера */
 #shako-next-btn {
   height: 48px !important;
   padding: 0 20px !important;
@@ -616,6 +635,7 @@ h1 {
   box-sizing: border-box !important;
 }
 
+/* Таймер — такая же высота */
 #shako-timer {
   height: 48px !important;
   display: flex !important;
@@ -658,7 +678,7 @@ h1 {
 #shako-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: contain; /* Картинка вписывается полностью */
 }
 
 #shako-word-slots {
@@ -714,12 +734,13 @@ h1 {
   text-align: center;
 }
 
+/* Клавиатура: вытянутые клавиши, как на картинке */
 #shako-keyboard {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  max-width: 600px;
+  max-width: 600px; /* Ограничиваем ширину, чтобы на планшетах не было слишком широко */
   margin-top: 15px;
   padding: 0 10px 20px 10px;
   align-items: center;
@@ -734,7 +755,7 @@ h1 {
 
 .shako-key {
   flex: 1;
-  height: 60px;
+  height: 60px; /* Сделали клавиши более вытянутыми */
   border: none;
   border-radius: 12px;
   background: #fff;
@@ -753,6 +774,7 @@ h1 {
   background: #bbdefb;
 }
 
+/* Кнопка стереть теперь такой же ширины, как буквы */
 .shako-key-backspace {
   flex: 1;
   background: #c62828;
