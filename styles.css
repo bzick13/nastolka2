@@ -361,6 +361,7 @@ h1 {
     top: 8px;
     left: 10px;
     gap: 8px;
+    flex-direction: column !important; /* Принудительный столбик на телефонах */
   }
   #draw-toolbar button {
     padding: 8px 12px;
