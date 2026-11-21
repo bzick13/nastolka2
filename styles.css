@@ -384,55 +384,55 @@ h1 {
 
   /* --- ИГРА ШЛАКОБЛОКУНЬ (В ДВЕ КОЛОНКИ) --- */
   #shakoblokun-overlay {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 5px 15px;
-    overflow: hidden;
-    height: 100dvh;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Ровно две колонки */
+    grid-template-rows: auto 1fr auto; /* Шапка, контент, кнопка */
+    gap: 10px;
+    padding: 10px;
+    overflow: hidden; /* Убираем скролл */
+    height: 100dvh; /* Ровно высота экрана */
     box-sizing: border-box;
-    align-items: stretch;
-    justify-content: space-between;
   }
 
+  /* Шапка с таймером на всю ширину */
   #shako-topbar {
+    grid-column: 1 / -1;
     width: 100%;
     min-height: auto;
     padding: 0;
-    margin-bottom: 5px;
+    margin-bottom: 0;
     display: flex;
     justify-content: flex-end;
-    flex: 0 0 100%;
   }
 
   #shako-timer {
-    height: 32px !important;
-    font-size: 1.3rem;
-    padding: 0 10px !important;
+    height: 36px !important;
+    font-size: 1.4rem;
+    padding: 0 12px !important;
   }
 
   /* --- ЛЕВАЯ КОЛОНКА: Картинка и Слоты --- */
   #shako-content {
-    flex: 1;
-    width: 50%;
-    max-width: 50%;
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
     margin-top: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    height: calc(100dvh - 90px);
+    height: 100%;
     overflow: hidden;
   }
 
   #shako-image-container {
     width: 100%;
     max-width: 250px;
-    height: 100%;
-    max-height: 220px;
+    height: 100%; /* Занимает всю доступную высоту */
+    max-height: 220px; /* Но не больше 220px */
     margin-bottom: 0;
-    flex-shrink: 1;
+    flex-shrink: 1; /* Сжимается, если мало места */
   }
 
   #shako-word-slots {
@@ -451,55 +451,55 @@ h1 {
 
   /* --- ПРАВАЯ КОЛОНКА: Клавиатура --- */
   #shako-keyboard {
-    flex: 1;
-    width: 50%;
-    max-width: 50%;
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+    height: 100%;
     margin-top: 0;
-    padding: 0 10px;
-    gap: 4px;
+    padding: 0;
+    gap: 5px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    height: calc(100dvh - 90px);
+    justify-content: center; /* Центрируем клавиатуру по вертикали */
   }
 
   .shako-keyboard-row {
-    gap: 4px;
+    gap: 5px;
   }
 
   .shako-key {
-    height: 38px;
-    font-size: 1rem;
+    height: 42px; /* Чуть увеличили клавиши */
+    font-size: 1.1rem;
     border-radius: 8px;
   }
 
   .shako-key-backspace {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
 
   /* --- НИЗ: Текст и Кнопка --- */
   #shako-action-row {
+    grid-column: 1 / -1;
+    grid-row: 3;
     width: 100%;
     max-width: 100%;
     margin-bottom: 0;
-    min-height: 36px;
+    min-height: 40px;
     padding: 0;
-    flex: 0 0 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 5px;
   }
 
   #shako-message {
-    font-size: 0.95rem;
+    font-size: 1rem;
     text-align: left;
   }
 
   #shako-next-btn {
-    height: 36px;
-    font-size: 1rem;
-    padding: 0 15px;
+    height: 40px;
+    font-size: 1.1rem;
+    padding: 0 20px;
   }
 
   /* Рисование в горизонтальном режиме */
