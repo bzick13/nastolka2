@@ -311,63 +311,101 @@ h1 {
     max-width: 100%;
   }
 
-  /* Сбрасываем растягивание для Блица и Подсчета, чтобы они встали в сетку */
   #blitz-btn,
   #score-game-btn {
     grid-column: auto;
     margin-top: 0;
   }
 
-  /* 1-й ряд: Рисовать, Говорить, Показывать */
   #menu > .btn:nth-child(1),
   #menu > .btn:nth-child(2),
   #menu > .btn:nth-child(3) {
     grid-column: span 2;
   }
 
-  /* 2-й ряд: Реверс, Да/Нет, Шлакоблокунь */
   #menu > .btn:nth-child(4),
   #menu > .btn:nth-child(5),
   #menu > .btn:nth-child(6) {
     grid-column: span 2;
   }
 
-  /* 3-й ряд: Блиц */
   #menu > .btn:nth-child(7) {
     grid-column: span 6;
   }
 
-  /* 4-й ряд: Кубик и Правила */
   #menu > .btn:nth-child(8),
   #menu > .btn:nth-child(9) {
     grid-column: span 3;
   }
 
-  /* 5-й ряд: Подсчет баллов */
   #menu > .btn:nth-child(10) {
     grid-column: span 6;
   }
 
   .btn { padding: 10px 4px; font-size: 0.85rem; border-radius: 10px; }
 
-  #modal { min-height: 200px; max-height: calc(100dvh - 20px); padding: 16px 20px; }
-  #overlay { padding: 10px; }
-  .word { font-size: 1.6rem; }
+  /* --- ИСПРАВЛЕНИЕ МОДАЛОК --- */
+  #overlay { padding: 5px; }
+  #modal {
+    min-height: auto;
+    max-height: calc(100dvh - 10px);
+    padding: 15px 20px;
+    overflow-y: auto;
+  }
+
+  #timer-display { font-size: 1.2rem; top: 5px; right: 10px; }
+  #content { padding: 10px 0; }
+  .word { font-size: 1.5rem; }
+  .points { font-size: 1rem; }
   .countdown { font-size: 3.2rem; }
   .blitz-list { font-size: 1rem; gap: 4px; }
-  #timer-display { font-size: 1.4rem; top: 6px; right: 12px; }
-  #draw-timer { font-size: 1.6rem; padding: 2px 10px; top: 6px; right: 10px; }
-  #draw-toolbar { top: 6px; left: 10px; gap: 6px; flex-direction: row; }
-  #draw-toolbar button { padding: 6px 12px; font-size: 0.85rem; line-height: 1.1; white-space: nowrap; }
-  
+  .rules-text { font-size: 0.85rem; max-height: 50vh; }
+
+  /* --- ИСПРАВЛЕНИЕ НАСТРОЙКИ ПОДСЧЕТА --- */
+  #score-setup-overlay { padding: 5px; }
+  .score-modal {
+    padding: 15px;
+    max-height: calc(100dvh - 10px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .score-modal h2 { font-size: 1.2rem; margin-bottom: 10px; }
+  .score-modal label { margin-bottom: 8px; font-size: 0.9rem; }
+  .team-input-row { margin-bottom: 5px; }
+  .team-input-row input[type="text"] { padding: 6px 10px; font-size: 0.9rem; }
+  .team-input-row input[type="color"] { width: 35px; height: 35px; }
+  .modal-buttons-row { margin-top: 10px; }
+  .modal-buttons-row .btn { padding: 10px; font-size: 1rem; }
+
+  /* --- ИСПРАВЛЕНИЕ ТАБЛО --- */
   #score-teams-list { flex-direction: row; flex-wrap: wrap; justify-content: center; }
   .score-team-btn { width: calc(50% - 10px); padding: 12px; font-size: 1.1rem; }
 
-  #shakoblokun-overlay { padding: 5px; }
-  #shako-image-container { max-width: 200px; }
-  #shako-keyboard { max-width: 100%; }
+  /* --- ИГРА ШЛАКОБЛОКУНЬ (В ДВЕ КОЛОНКИ) --- */
+  #shakoblokun-overlay {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 5px;
+    gap: 10px;
+    overflow-y: hidden;
+  }
+  
+  #shako-topbar { width: 100%; padding: 0 10px; margin-bottom: 5px; }
+  #shako-content { width: 45%; margin-top: 0; flex-direction: row; align-items: flex-start; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  #shako-image-container { width: 100%; max-width: 180px; margin-bottom: 5px; }
+  #shako-word-slots { width: 100%; margin-bottom: 5px; justify-content: center; }
+  .shako-slot { height: 35px; min-width: 20px; max-width: 30px; font-size: 1rem; }
+  #shako-message { font-size: 0.9rem; margin-bottom: 5px; }
+  #shako-keyboard { width: 50%; margin-top: 0; padding: 0; gap: 4px; }
   .shako-key { height: 35px; font-size: 0.9rem; }
-  .shako-slot { height: 35px; min-width: 20px; max-width: 35px; font-size: 1rem; }
+  .shako-key-backspace { font-size: 1rem; }
+  
+  /* Рисование в горизонтальном режиме */
+  #draw-timer { font-size: 1.6rem; padding: 2px 10px; top: 6px; right: 10px; }
+  #draw-toolbar { top: 6px; left: 10px; gap: 6px; flex-direction: row; }
+  #draw-toolbar button { padding: 6px 12px; font-size: 0.85rem; line-height: 1.1; white-space: nowrap; }
 }
 
 @media (max-width: 480px) and (orientation: portrait) {
