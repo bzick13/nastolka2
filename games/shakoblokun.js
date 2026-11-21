@@ -78,7 +78,6 @@ function launchGameScreen(currentGame) {
     gameOverlay.className = 'hidden';
     gameOverlay.innerHTML = `
       <div id="shako-topbar">
-        <button id="shako-next-btn" class="btn green hidden">Дальше</button>
         <div id="shako-timer">60</div>
       </div>
       <div id="shako-content">
@@ -89,6 +88,9 @@ function launchGameScreen(currentGame) {
         <div id="shako-message"></div>
       </div>
       <div id="shako-keyboard"></div>
+      
+      <!-- Кнопка "Дальше" теперь в самом низу -->
+      <button id="shako-next-btn" class="btn green">Дальше</button>
     `;
     document.body.appendChild(gameOverlay);
   }
@@ -117,7 +119,6 @@ function initGameLogic(currentGame) {
   const nextBtn = document.getElementById('shako-next-btn');
 
   // ЖЕСТКО СКРЫВАЕМ КНОПКУ В САМОМ НАЧАЛЕ
-  nextBtn.classList.add('hidden');
   nextBtn.style.display = 'none'; 
   nextBtn.textContent = 'Дальше';
 
@@ -143,11 +144,9 @@ function initGameLogic(currentGame) {
     slot.className = 'shako-slot';
     slot.dataset.index = i;
     slot.onclick = () => {
-      // Если ячейка заполнена, стираем букву
       if (currentInput[i] !== '') {
         currentInput[i] = '';
       }
-      // В любом случае делаем эту ячейку активной
       activeIndex = i;
       updateSlots();
     };
@@ -200,22 +199,16 @@ function initGameLogic(currentGame) {
 
   function handleKeyPress(letter) {
     let targetIndex = -1;
-
-    // Если активная ячейка пуста, ставим букву именно туда
     if (currentInput[activeIndex] === '') {
       targetIndex = activeIndex;
     } else {
-      // Иначе ищем первую пустую ячейку
       targetIndex = currentInput.indexOf('');
     }
 
     if (targetIndex !== -1) {
       currentInput[targetIndex] = letter;
       activeIndex = targetIndex + 1;
-      
-      // Если дошли до конца, останавливаемся на последней ячейке
       if (activeIndex >= wordLen) activeIndex = wordLen - 1;
-      
       updateSlots();
     }
   }
@@ -226,7 +219,6 @@ function initGameLogic(currentGame) {
       slot.textContent = currentInput[index];
       slot.classList.remove('correct', 'wrong', 'active');
 
-      // Подсвечиваем активную ячейку
       if (index === activeIndex) {
         slot.classList.add('active');
       }
@@ -247,8 +239,7 @@ function initGameLogic(currentGame) {
       messageEl.style.color = '#2e7d32';
       nextBtn.textContent = 'Дальше';
 
-      // ПОКАЗЫВАЕМ КНОПКУ ТОЛЬКО ЗДЕСЬ
-      nextBtn.classList.remove('hidden');
+      // ПОКАЗЫВАЕМ КНОПКУ ВНИЗУ
       nextBtn.style.display = 'flex'; 
 
       clearInterval(state.timerInterval);
@@ -286,8 +277,7 @@ function initGameLogic(currentGame) {
       messageEl.style.color = '#c62828';
       nextBtn.textContent = 'Завершить';
 
-      // ПОКАЗЫВАЕМ КНОПКУ ПО ТАЙМАУТУ
-      nextBtn.classList.remove('hidden');
+      // ПОКАЗЫВАЕМ КНОПКУ ВНИЗУ
       nextBtn.style.display = 'flex';
 
       document.querySelectorAll('.shako-key').forEach(btn => btn.onclick = null);
