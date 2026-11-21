@@ -294,18 +294,50 @@ h1 {
 
 /* ============ ГОРИЗОНТАЛЬ ============ */
 @media (orientation: landscape) and (max-height: 500px) {
-  header { padding: 8px 10px; }
-  h1 { font-size: 1.8rem; letter-spacing: 1px; }
+  header { padding: 5px 10px; }
+  h1 { font-size: 1.5rem; letter-spacing: 1px; }
 
   #menu {
-    grid-template-columns: repeat(4, 1fr);
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* Сетка на 6 колонок */
     gap: 8px;
     padding: 8px;
     max-width: 100%;
   }
 
-  .btn { padding: 14px 6px; font-size: 0.95rem; border-radius: 12px; }
+  /* 1-й ряд: Рисовать, Говорить, Показывать (по 2 колонки) */
+  #menu > .btn:nth-child(1),
+  #menu > .btn:nth-child(2),
+  #menu > .btn:nth-child(3) {
+    grid-column: span 2;
+  }
 
+  /* 2-й ряд: Реверс, Да/Нет, Шлакоблокунь (по 2 колонки) */
+  #menu > .btn:nth-child(4),
+  #menu > .btn:nth-child(5),
+  #menu > .btn:nth-child(6) {
+    grid-column: span 2;
+  }
+
+  /* 3-й ряд: Блиц (на всю ширину) */
+  #menu > .btn:nth-child(7) {
+    grid-column: span 6;
+  }
+
+  /* 4-й ряд: Кубик и Правила (по 3 колонки) */
+  #menu > .btn:nth-child(8),
+  #menu > .btn:nth-child(9) {
+    grid-column: span 3;
+  }
+
+  /* 5-й ряд: Подсчет баллов (на всю ширину) */
+  #menu > .btn:nth-child(10) {
+    grid-column: span 6;
+  }
+
+  .btn { padding: 10px 4px; font-size: 0.85rem; border-radius: 10px; }
+
+  /* Остальные стили для модалок и игр */
   #modal {
     min-height: 200px;
     max-height: calc(100dvh - 20px);
@@ -351,6 +383,13 @@ h1 {
     padding: 12px;
     font-size: 1.1rem;
   }
+
+  /* Игра Шлакоблокунь (пока оставим как было, чтобы не сломать) */
+  #shakoblokun-overlay { padding: 5px; }
+  #shako-image-container { max-width: 200px; }
+  #shako-keyboard { max-width: 100%; }
+  .shako-key { height: 35px; font-size: 0.9rem; }
+  .shako-slot { height: 35px; min-width: 20px; max-width: 35px; font-size: 1rem; }
 }
 
 @media (max-width: 480px) and (orientation: portrait) {
@@ -369,12 +408,11 @@ h1 {
 /* ============ ПОДСЧЕТ БАЛЛОВ ============ */
 
 #score-game-btn {
-  grid-column: 1 / -1;
-  margin-top: 10px;
+  /* Убираем grid-column, так как меню теперь адаптивное через nth-child */
 }
 
 #blitz-btn {
-  grid-column: 1 / -1;
+  /* Убираем grid-column, так как меню теперь адаптивное через nth-child */
 }
 
 #score-setup-overlay {
@@ -613,7 +651,7 @@ h1 {
   align-items: center;
   margin-bottom: 15px;
   padding: 0 15px;
-  min-height: 54px; /* Фиксируем высоту, чтобы не прыгало */
+  min-height: 54px;
 }
 
 /* Кнопка "Дальше"/"Завершить" */
@@ -625,7 +663,7 @@ h1 {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   margin: 0;
   box-sizing: border-box;
-  display: none; /* Скрыта по умолчанию, управляется JS */
+  display: none;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -732,7 +770,7 @@ h1 {
   font-weight: 600;
   text-align: left;
   margin: 0;
-  flex: 1; /* Занимает всё свободное место слева */
+  flex: 1;
 }
 
 /* Клавиатура */
