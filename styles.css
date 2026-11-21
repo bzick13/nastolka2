@@ -667,20 +667,21 @@ h1 {
   display: block;
 }
 
+/* СЛОТЫ БУКВ — СТРОГО В ОДНУ СТРОКУ */
 #shako-word-slots {
   display: flex;
   gap: 5px;
   margin-bottom: 20px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Запрещаем перенос */
   justify-content: center;
+  align-items: center;
   width: 100%;
   padding: 0 10px;
 }
 
 .shako-slot {
   flex: 1;
-  min-width: 25px;
-  max-width: 45px;
+  min-width: 20px; /* Уменьшили, чтобы влезали длинные слова */
   height: 45px;
   border-radius: 8px;
   background: #fff;
