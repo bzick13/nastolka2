@@ -78,6 +78,7 @@ function launchGameScreen(currentGame) {
     gameOverlay.className = 'hidden';
     gameOverlay.innerHTML = `
       <div id="shako-topbar">
+        <button id="shako-next-btn" class="btn green hidden">Дальше</button>
         <div id="shako-timer">60</div>
       </div>
       <div id="shako-content">
@@ -88,9 +89,6 @@ function launchGameScreen(currentGame) {
         <div id="shako-message"></div>
       </div>
       <div id="shako-keyboard"></div>
-      
-      <!-- Кнопка "Дальше" теперь в самом низу -->
-      <button id="shako-next-btn" class="btn green">Дальше</button>
     `;
     document.body.appendChild(gameOverlay);
   }
@@ -118,8 +116,8 @@ function initGameLogic(currentGame) {
 
   const nextBtn = document.getElementById('shako-next-btn');
 
-  // ЖЕСТКО СКРЫВАЕМ КНОПКУ В САМОМ НАЧАЛЕ
-  nextBtn.style.display = 'none'; 
+  // Скрываем кнопку в начале игры
+  nextBtn.classList.add('hidden');
   nextBtn.textContent = 'Дальше';
 
   const imgEl = document.getElementById('shako-image');
@@ -132,7 +130,7 @@ function initGameLogic(currentGame) {
   const messageEl = document.getElementById('shako-message');
   const timerEl = document.getElementById('shako-timer');
 
-  // СБРОС СОСТОЯНИЯ ОТ ПРОШЛОЙ ИГРЫ
+  // СБРОС СОСТОЯНИЯ
   messageEl.textContent = '';
   messageEl.style.color = '';
   slotsContainer.innerHTML = '';
@@ -239,8 +237,8 @@ function initGameLogic(currentGame) {
       messageEl.style.color = '#2e7d32';
       nextBtn.textContent = 'Дальше';
 
-      // ПОКАЗЫВАЕМ КНОПКУ ВНИЗУ
-      nextBtn.style.display = 'flex'; 
+      // ПОКАЗЫВАЕМ КНОПКУ ВВЕРХУ
+      nextBtn.classList.remove('hidden');
 
       clearInterval(state.timerInterval);
       state.timerInterval = null;
@@ -276,9 +274,9 @@ function initGameLogic(currentGame) {
       messageEl.textContent = 'Время вышло! Слово: ' + currentWord;
       messageEl.style.color = '#c62828';
       nextBtn.textContent = 'Завершить';
-
-      // ПОКАЗЫВАЕМ КНОПКУ ВНИЗУ
-      nextBtn.style.display = 'flex';
+      
+      // ПОКАЗЫВАЕМ КНОПКУ ВВЕРХУ
+      nextBtn.classList.remove('hidden');
 
       document.querySelectorAll('.shako-key').forEach(btn => btn.onclick = null);
     }
