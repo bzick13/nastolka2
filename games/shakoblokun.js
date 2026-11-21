@@ -10,10 +10,15 @@ export const META = {
   points: 3,
   words: [
     { word: 'БЕГЕМОТЫГА', image: 'image/Бегемотыга.jpg' },
+    { word: 'ГИТАРАКАН', image: 'image/Гитаракан.jpg' },
+    { word: 'ДЯТЕЛЕФОН', image: 'image/Дятелефон.jpg' },
     { word: 'КАШАЛОТОС', image: 'image/Кашалотос.jpg' },
+    { word: 'КОМАРКЕР', image: 'image/Комаркер.jpg' },
     { word: 'НОСОРОГАЛИК', image: 'image/Носорогалик.jpg' },
+    { word: 'ПОПУГАЙКА', image: 'image/Попугайка.jpg' },
     { word: 'САМОВАРАН', image: 'image/Самоваран.jpg' },
-    { word: 'СКАТОК', image: 'image/Скаток.jpg' }
+    { word: 'СКАТОК', image: 'image/Скаток.jpg' },
+    { word: 'ШЛАКОБЛОКУНЬ', image: 'image/Шлакоблокунь.jpg' }
   ]
 };
 
@@ -78,7 +83,6 @@ function launchGameScreen(currentGame) {
     gameOverlay.className = 'hidden';
     gameOverlay.innerHTML = `
       <div id="shako-topbar">
-        <!-- Убрали класс hidden, управляем через style.display -->
         <button id="shako-next-btn" class="btn green">Дальше</button>
         <div id="shako-timer">60</div>
       </div>
