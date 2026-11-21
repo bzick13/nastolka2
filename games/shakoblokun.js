@@ -81,9 +81,10 @@ function launchGameScreen(currentGame) {
     gameOverlay = document.createElement('div');
     gameOverlay.id = 'shakoblokun-overlay';
     gameOverlay.className = 'hidden';
+    
+    // Обновленная структура HTML
     gameOverlay.innerHTML = `
       <div id="shako-topbar">
-        <button id="shako-next-btn" class="btn green">Дальше</button>
         <div id="shako-timer">60</div>
       </div>
       <div id="shako-content">
@@ -91,8 +92,14 @@ function launchGameScreen(currentGame) {
           <img id="shako-image" src="" alt="Картинка">
         </div>
         <div id="shako-word-slots"></div>
-        <div id="shako-message"></div>
       </div>
+      
+      <!-- Новый блок: текст слева, кнопка справа -->
+      <div id="shako-action-row">
+        <div id="shako-message"></div>
+        <button id="shako-next-btn" class="btn green">Дальше</button>
+      </div>
+
       <div id="shako-keyboard"></div>
     `;
     document.body.appendChild(gameOverlay);
@@ -121,7 +128,7 @@ function initGameLogic(currentGame) {
 
   const nextBtn = document.getElementById('shako-next-btn');
 
-  // Скрываем кнопку в начале игры через style.display
+  // Скрываем кнопку в начале игры
   nextBtn.style.display = 'none';
   nextBtn.textContent = 'Дальше';
 
@@ -135,7 +142,7 @@ function initGameLogic(currentGame) {
   const messageEl = document.getElementById('shako-message');
   const timerEl = document.getElementById('shako-timer');
 
-  // СБРОС СОСТОЯНИЯ ОТ ПРОШЛОЙ ИГРЫ
+  // СБРОС СОСТОЯНИЯ
   messageEl.textContent = '';
   messageEl.style.color = '';
   slotsContainer.innerHTML = '';
@@ -238,11 +245,11 @@ function initGameLogic(currentGame) {
 
     if (guess === currentWord) {
       slots.forEach(slot => slot.classList.add('correct'));
-      messageEl.textContent = 'Правильно!';
+      messageEl.innerHTML = 'Правильно!';
       messageEl.style.color = '#2e7d32';
       nextBtn.textContent = 'Дальше';
 
-      // ПОКАЗЫВАЕМ КНОПКУ ВВЕРХУ
+      // ПОКАЗЫВАЕМ КНОПКУ СПРАВА
       nextBtn.style.display = 'flex';
 
       clearInterval(state.timerInterval);
@@ -276,11 +283,13 @@ function initGameLogic(currentGame) {
       clearInterval(state.timerInterval);
       state.timerInterval = null;
       signalEnd();
-      messageEl.textContent = 'Время вышло! Слово: ' + currentWord;
+      
+      // ДВЕ СТРОЧКИ СЛЕВА
+      messageEl.innerHTML = 'Время вышло!<br>Слово: ' + currentWord;
       messageEl.style.color = '#c62828';
       nextBtn.textContent = 'Завершить';
 
-      // ПОКАЗЫВАЕМ КНОПКУ ВВЕРХУ
+      // ПОКАЗЫВАЕМ КНОПКУ СПРАВА
       nextBtn.style.display = 'flex';
 
       document.querySelectorAll('.shako-key').forEach(btn => btn.onclick = null);
