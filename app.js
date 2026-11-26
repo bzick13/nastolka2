@@ -7,7 +7,8 @@ import * as yesno from './games/yesno.js';
 import * as blitz from './games/blitz.js';
 import * as dice from './games/dice.js';
 import * as rules from './games/rules.js';
-import * as shakoblokun from './games/shakoblokun.js'; // Импорт новой игры
+import * as shakoblokun from './games/shakoblokun.js';
+import { showHardMode } from './games/hardmode.js'; // Импорт усложнений
 
 /* Реестр игр: ключ → модуль */
 export const GAMES = { draw, speak, show, reverse, yesno, blitz, dice, rules, shakoblokun };
@@ -29,6 +30,7 @@ export const timerDisplay = $('#timer-display');
 export const modalButtons = $('#modal-buttons');
 export const startBtn = $('#start-btn');
 export const closeBtn = $('#close-btn');
+export const hardmodeBtn = $('#hardmode-btn'); // Новая кнопка
 export const drawOverlay = $('#draw-overlay');
 export const drawTimer = $('#draw-timer');
 export const canvas = $('#canvas');
@@ -115,23 +117,28 @@ export function openGame(key) {
     key,
     meta: mod.META,
     currentWord: null,
-    currentWords: null
+    currentWords: null,
+    hardMode: null
   };
   state.isRunning = false;
   clearIntervals();
 
   overlay.classList.remove('hidden');
-  history.pushState({ game: key }, '', ''); // Добавляем запись в историю
+  history.pushState({ game: key }, '', '');
   content.innerHTML = '';
   timerDisplay.classList.add('hidden');
   modalButtons.classList.add('hidden');
-  
-  // Принудительно показываем кнопки при открытии
+
   startBtn.classList.remove('hidden');
   closeBtn.classList.remove('hidden');
-  
   startBtn.onclick = null;
   closeBtn.onclick = closeOverlay;
+
+  // Показываем кнопку усложнения
+  if (hardmodeBtn) {
+    hardmodeBtn.classList.remove('hidden');
+    hardmodeBtn.onclick = () => showHardMode(state.currentGame);
+  }
 
   mod.open(state.currentGame);
 }
@@ -153,12 +160,28 @@ export function closeOverlay() {
   state.currentGame = null;
   timerDisplay.classList.add('hidden');
   timerDisplay.style.color = '#c62828';
-  
-  // Принудительно показываем кнопки при закрытии (чтобы не пропадали)
+
   startBtn.classList.remove('hidden');
   closeBtn.classList.remove('hidden');
   startBtn.onclick = null;
+
+  // Скрываем кнопку усложнения
+  if (hardmodeBtn) {
+    hardmodeBtn.classList.add('hidden');
+    hardmodeBtn.onclick = null;
+  }
 }
+
+/* ============ ЗАПУСК ПОСЛЕ УСЛОЖНЕНИЯ ============ */
+// Слушаем событие, которое вызывает hardmode.js при нажатии "Старт"
+window.addEventListener('startHardMode', (e) => {
+  const currentGame = e.detail;
+  const mod = GAMES[currentGame.key];
+  if (mod && mod.start) {
+    // Если у игры есть функция start (как в draw.js или speak.js), вызываем её
+    mod.start(currentGame);
+  }
+});
 
 /* ============ ИНИЦИАЛИЗАЦИЯ ОСНОВНЫХ ИГР ============ */
 document.querySelectorAll('[data-game]').forEach(btn => {
@@ -196,20 +219,12 @@ function initScoreGame() {
   if (!scoreGameBtn) return;
 
   const DEFAULT_COLORS = [
-    '#1565c0', // Синий
-    '#c62828', // Красный
-    '#2e7d32', // Зеленый
-    '#f57c00', // Оранжевый
-    '#8e24aa', // Фиолетовый
-    '#00838f', // Бирюзовый
-    '#d81b60', // Розовый
-    '#5d4037'  // Коричневый
+    '#1565c0', '#c62828', '#2e7d32', '#f57c00', '#8e24aa', '#00838f', '#d81b60', '#5d4037'
   ];
 
   let scoreState = null;
   let activeTeamIndex = 0;
 
-  // Загрузка состояния при старте
   try {
     const saved = localStorage.getItem(SCORE_STORAGE_KEY);
     if (saved) {
@@ -218,7 +233,6 @@ function initScoreGame() {
     }
   } catch (e) { console.warn('Ошибка загрузки', e); }
 
-  // --- НАСТРОЙКА ---
   function renderSetupInputs(count) {
     teamsConfig.innerHTML = '';
     for (let i = 0; i < count; i++) {
@@ -245,7 +259,6 @@ function initScoreGame() {
   });
 
   teamCountSelect.addEventListener('change', () => renderSetupInputs(parseInt(teamCountSelect.value, 10)));
-
   cancelBtn.addEventListener('click', () => setupOverlay.classList.add('hidden'));
 
   startBtn.addEventListener('click', () => {
@@ -265,7 +278,6 @@ function initScoreGame() {
     history.pushState({ scoreBoard: true }, '', '');
   });
 
-  // --- ИГРОВОЕ ТАБЛО ---
   function saveState() {
     if (scoreState) {
       localStorage.setItem(SCORE_STORAGE_KEY, JSON.stringify({ ...scoreState, activeTeamIndex }));
@@ -275,6 +287,7 @@ function initScoreGame() {
   function renderBoard() {
     if (!scoreState) return;
     teamsList.innerHTML = '';
+    teamsList.style.setProperty('--team-count', scoreState.teams.length);
 
     scoreState.teams.forEach((team, index) => {
       const btn = document.createElement('button');
@@ -293,7 +306,6 @@ function initScoreGame() {
         badgeHtml = '<span class="score-badge">💩 Усложнение</span>';
       }
 
-      // Красим в цвет команды, только если нет особого статуса
       if (!special) {
         btn.style.backgroundColor = team.color;
       }
@@ -308,11 +320,9 @@ function initScoreGame() {
     });
   }
 
-  // --- МОДАЛКА БАЛЛОВ ---
   function openPointsModal(team, index) {
-    // ПРОВЕРКА: Если кликнули не по активной команде — выходим
     if (index !== activeTeamIndex) {
-      if (navigator.vibrate) navigator.vibrate(50); // Легкая вибрация для понимания
+      if (navigator.vibrate) navigator.vibrate(50);
       return; 
     }
 
@@ -348,21 +358,18 @@ function initScoreGame() {
 
   modalCloseBtn.addEventListener('click', closePointsModal);
 
-  // --- ИЗМЕНЕНИЕ БАЛЛОВ ---
   function addPoints(teamIndex, amount) {
     scoreState.teams[teamIndex].score += amount;
     saveState();
     renderBoard();
   }
 
-  // --- УПРАВЛЕНИЕ ХОДОМ ---
   endTurnBtn.addEventListener('click', () => {
     activeTeamIndex = (activeTeamIndex + 1) % scoreState.teams.length;
     saveState();
     renderBoard();
   });
 
-  // --- СБРОС И ВЫХОД ---
   resetBtn.addEventListener('click', () => {
     if (confirm('Сбросить все баллы и начать заново?')) {
       localStorage.removeItem(SCORE_STORAGE_KEY);
@@ -380,33 +387,28 @@ function initScoreGame() {
   });
 }
 
-// Запуск модуля подсчета
 initScoreGame();
 
 /* ============ ОБРАБОТКА СИСТЕМНОЙ КНОПКИ "НАЗАД" ============ */
 window.addEventListener('popstate', () => {
-  // 1. Если открыта модалка с баллами
   const pointsModal = $('#score-points-modal');
   if (pointsModal && !pointsModal.classList.contains('hidden')) {
     pointsModal.classList.add('hidden');
     return;
   }
 
-  // 2. Если открыто табло игры
   const boardOverlay = $('#score-board-overlay');
   if (boardOverlay && !boardOverlay.classList.contains('hidden')) {
     boardOverlay.classList.add('hidden');
     return;
   }
 
-  // 3. Если открыты настройки команд
   const setupOverlay = $('#score-setup-overlay');
   if (setupOverlay && !setupOverlay.classList.contains('hidden')) {
     setupOverlay.classList.add('hidden');
     return;
   }
 
-  // 4. Если открыта игра Шлакоблокунь (проверяем ДО общего overlay)
   const shakoOverlay = document.getElementById('shakoblokun-overlay');
   if (shakoOverlay && !shakoOverlay.classList.contains('hidden')) {
     shakoblokun.cleanup?.();
@@ -414,14 +416,11 @@ window.addEventListener('popstate', () => {
     overlay.classList.add('hidden');
     state.isRunning = false;
     state.currentGame = null;
-    
-    // Возвращаем кнопки
     startBtn.classList.remove('hidden');
     closeBtn.classList.remove('hidden');
     return;
   }
 
-  // 5. Если открыто окно рисования или любой другой игры
   if (!drawOverlay.classList.contains('hidden') || !overlay.classList.contains('hidden')) {
     closeOverlay();
     return;
