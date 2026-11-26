@@ -137,7 +137,7 @@ export function openGame(key) {
   // Показываем кнопку усложнения только для определенных игр
   if (hardmodeBtn) {
     const allowedGames = ['draw', 'show', 'speak', 'reverse', 'yesno', 'shakoblokun'];
-    
+
     if (allowedGames.includes(key)) {
       hardmodeBtn.classList.remove('hidden');
       hardmodeBtn.onclick = () => showHardMode(state.currentGame);
@@ -182,8 +182,15 @@ export function closeOverlay() {
 window.addEventListener('startHardMode', (e) => {
   const currentGame = e.detail;
   const mod = GAMES[currentGame.key];
+  
+  // Принудительно скрываем основное окно с правилами и сбрасываем флаг
+  overlay.classList.add('hidden');
+  state.isRunning = false; 
+  
   if (mod && mod.start) {
     mod.start(currentGame);
+  } else if (mod && mod.open) {
+    mod.open(currentGame);
   }
 });
 
