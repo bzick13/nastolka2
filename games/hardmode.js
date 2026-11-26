@@ -1,4 +1,4 @@
-import { rand } from '../app.js';
+import { rand, GAMES } from '../app.js'; // Импортируем GAMES
 
 export const HARD_MODES = {
   draw: [
@@ -64,8 +64,18 @@ export function showHardMode(currentGame) {
       currentGame.meta.time = randomMode.time;
     }
 
-    // Просто отправляем событие, что пора стартовать, и передаем игру
-    window.dispatchEvent(new CustomEvent('startHardMode', { detail: currentGame }));
+    // Прячем модалку с правилами
+    document.getElementById('overlay').classList.add('hidden');
+
+    // Прямой вызов функции запуска из игры
+    const mod = GAMES[gameKey];
+    if (mod) {
+      if (mod.start) {
+        mod.start(currentGame);
+      } else if (mod.open) {
+        mod.open(currentGame);
+      }
+    }
   };
 
   // Обработчик кнопки "Отмена"
