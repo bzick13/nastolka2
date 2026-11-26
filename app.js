@@ -173,9 +173,9 @@ function showHardMode(currentGame) {
       currentGame.meta.time = randomMode.time;
     }
 
-    // Скрываем модалку с правилами
+    // Скрываем модалку с правилами и сбрасываем флаг
     overlay.classList.add('hidden');
-    state.isRunning = false; // Сбрасываем флаг
+    state.isRunning = false;
 
     // Запускаем игру
     const mod = GAMES[gameKey];
