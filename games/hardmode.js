@@ -1,13 +1,11 @@
 import { rand } from '../app.js';
 
-// Список усложнений для каждой игры
 export const HARD_MODES = {
   draw: [
     { text: 'Рисовать другой рукой.', time: null },
     { text: 'Рисовать только прямые линии.', time: null },
     { text: 'Время ограничено 60 сек.', time: 60 }
   ],
-  // Для остальных игр (пока заглушки, тексты можно менять)
   speak: [
     { text: 'Говорить только шепотом.', time: null },
     { text: 'Нельзя использовать глаголы.', time: null }
@@ -35,11 +33,9 @@ export const HARD_MODES = {
 
 export function showHardMode(currentGame) {
   const gameKey = currentGame.key;
-  // Берем список усложнений для текущей игры (или заглушку, если игры нет в списке)
   const modes = HARD_MODES[gameKey] || [{ text: 'Усложнение не задано.', time: null }];
   const randomMode = rand(modes);
 
-  // Создаем окно усложнения, если его еще нет в DOM
   let hardOverlay = document.getElementById('hard-overlay');
   if (!hardOverlay) {
     hardOverlay = document.createElement('div');
@@ -56,26 +52,22 @@ export function showHardMode(currentGame) {
     document.body.appendChild(hardOverlay);
   }
 
-  // Вставляем текст случайного усложнения
   document.getElementById('hard-text').textContent = randomMode.text;
   hardOverlay.classList.remove('hidden');
 
-  // Обработчик кнопки "Старт" в окне усложнения
+  // Обработчик кнопки "Старт"
   document.getElementById('hard-start-btn').onclick = () => {
     hardOverlay.classList.add('hidden');
-
-    // Сохраняем выбранное усложнение в текущую игру
+    
+    // Сохраняем усложнение в текущую игру
     currentGame.hardMode = randomMode;
 
-    // Если у усложнения есть новое время, перезаписываем META игры
+    // Если есть новое время, меняем его
     if (randomMode.time !== null) {
       currentGame.meta.time = randomMode.time;
     }
 
-    // Закрываем основное окно с правилами
-    document.getElementById('overlay').classList.add('hidden');
-
-    // Отправляем событие в app.js, чтобы он запустил игру
+    // Отправляем событие в app.js для запуска игры
     window.dispatchEvent(new CustomEvent('startHardMode', { detail: currentGame }));
   };
 
