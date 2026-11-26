@@ -75,11 +75,10 @@ h1 {
 .red { background: #c62828; }
 .red:hover { background: #d32f2f; }
 
-/* Новый желтый цвет для Блица */
 .yellow { background: #fbc02d; color: #333; }
 .yellow:hover { background: #f9a825; }
 
-/* Оверлей (для основных игр) */
+/* Оверлей */
 #overlay {
   position: fixed;
   inset: 0;
@@ -274,6 +273,45 @@ h1 {
   cursor: crosshair;
 }
 
+/* --- НОВЫЕ КНОПКИ ИНСТРУМЕНТОВ --- */
+#draw-extra-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+#draw-extra-tools button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+#draw-extra-tools button:active {
+  transform: scale(0.95);
+}
+
+#undo-btn, #redo-btn { background: #607d8b; }
+#undo-btn:hover, #redo-btn:hover { background: #78909c; }
+
+#freehand-btn, #line-btn { background: #8e24aa; }
+#freehand-btn:hover, #line-btn:hover { background: #ab47bc; }
+
+#freehand-btn.active, #line-btn.active {
+  background: #e91e63;
+  box-shadow: 0 0 0 2px rgba(233, 30, 99, 0.4);
+}
+
 .countdown {
   font-size: 5rem;
   font-weight: 800;
@@ -294,8 +332,8 @@ h1 {
 
 /* ============ ГОРИЗОНТАЛЬ ============ */
 @media (orientation: landscape) and (max-height: 500px) {
-  header { padding: 8px 10px; }
-  h1 { font-size: 1.8rem; letter-spacing: 1px; }
+  header { padding: 5px 10px; }
+  h1 { font-size: 1.5rem; letter-spacing: 1px; }
 
   #menu {
     grid-template-columns: repeat(4, 1fr);
@@ -332,6 +370,8 @@ h1 {
     left: 10px;
     gap: 6px;
     flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 60%;
   }
 
   #draw-toolbar button {
@@ -339,6 +379,21 @@ h1 {
     font-size: 0.85rem;
     line-height: 1.1;
     white-space: nowrap;
+  }
+
+  #draw-extra-tools {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    margin-top: 0;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  #draw-extra-tools button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    width: auto;
   }
 
   #score-teams-list {
