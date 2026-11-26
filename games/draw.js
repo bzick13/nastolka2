@@ -10,42 +10,135 @@ export const META = {
   time: 90,
   points: 2,
   words: [
-    'Баранка', 'Батарейка', 'Божья коровка', 'Браслет', 'Булавка', 'Ваза с цветами',
-    'Ведьма', 'Верёвочная лестница', 'Вирус', 'Влажные салфетки', 'Воздушный змей',
-    'Глобус', 'Горизонт', 'Град', 'Грустный клоун', 'Грустный огурец', 'Губка',
-    'Дворник', 'Двухъярусная кровать', 'Доспехи', 'Духи', 'Душа', 'Дым', 'Дырокол',
-    'Жалюзи', 'Жара', 'Жертвоприношение', 'Замочная скважина', 'Зарядное устройство',
-    'Золушка', 'Зубная паста', 'Иллюминатор', 'Калейдоскоп', 'Клизма', 'Клубничное варенье',
-    'Клубок ниток', 'Ковер', 'Коготь', 'Колба', 'Комикс', 'Компас', 'Корзина для белья',
-    'Корка арбуза', 'Кот в мешке', 'Кресло-качалка', 'Кривое зеркало', 'Кубик Рубика',
-    'Кусок пиццы', 'Леденец', 'Листопад', 'Лобовое стекло', 'Лоджия', 'Лягушка', 'Маяк',
-    'Маракас', 'Медицинская маска', 'Микроскоп', 'Молитва', 'Мольберт', 'Мухомор',
-    'Мыльный пузырь', 'Наволочка', 'Надувной матрас', 'Напёрсток', 'Настольная лампа',
-    'Обруч', 'Ограбление банка', 'Оригами', 'Отражение', 'Парус', 'Пачка чипсов',
-    'Пицца с ананасами', 'Поводок', 'Погоны', 'Подушка безопасности', 'Подсвечник',
-    'Подтягивание', 'Половник', 'Поплавок', 'Почтовый ящик', 'Прикроватная тумбочка',
-    'Прищепка', 'Пробка', 'Проектор', 'Разбитое зеркало', 'Раскладушка',
-    'Ремень безопасности', 'Сито', 'Скрипка', 'Складной нож', 'Складной стул',
-    'Сломанный зонт', 'Собачья будка', 'Солнечное затмение', 'Солнечный зайчик',
-    'Солнечный луч', 'Сопля', 'Сосиска в тесте', 'Таблица Менделеева', 'Телепортация',
-    'Тёрка', 'Термометр', 'Тир', 'Токсичность', 'Точилка', 'Транспортир',
-    'Туалетная бумага', 'Угловой диван', 'Уголь', 'Улей', 'Фокусник', 'Форточка',
-    'Фотобудка', 'Фотозона', 'Хлопушка', 'Часы с кукушкой', 'Чашка чая', 'Черепаха',
-    'Черная кошка', 'Шампунь', 'Штурвал', 'Щеколда'
+    'Баранка',
+    'Батарейка',
+    'Божья коровка',
+    'Браслет',
+    'Булавка',
+    'Ваза с цветами',
+    'Ведьма',
+    'Верёвочная лестница',
+    'Вирус',
+    'Влажные салфетки',
+    'Воздушный змей',
+    'Глобус',
+    'Горизонт',
+    'Град',
+    'Грустный клоун',
+    'Грустный огурец',
+    'Губка',
+    'Дворник',
+    'Двухъярусная кровать',
+    'Доспехи',
+    'Духи',
+    'Душа',
+    'Дым',
+    'Дырокол',
+    'Жалюзи',
+    'Жара',
+    'Жертвоприношение',
+    'Замочная скважина',
+    'Зарядное устройство',
+    'Золушка',
+    'Зубная паста',
+    'Иллюминатор',
+    'Калейдоскоп',
+    'Клизма',
+    'Клубничное варенье',
+    'Клубок ниток',
+    'Ковер',
+    'Коготь',
+    'Колба',
+    'Комикс',
+    'Компас',
+    'Корзина для белья',
+    'Корка арбуза',
+    'Кот в мешке',
+    'Кресло-качалка',
+    'Кривое зеркало',
+    'Кубик Рубика',
+    'Кусок пиццы',
+    'Леденец',
+    'Листопад',
+    'Лобовое стекло',
+    'Лоджия',
+    'Лягушка',
+    'Маяк',
+    'Маракас',
+    'Медицинская маска',
+    'Микроскоп',
+    'Молитва',
+    'Мольберт',
+    'Мухомор',
+    'Мыльный пузырь',
+    'Наволочка',
+    'Надувной матрас',
+    'Напёрсток',
+    'Настольная лампа',
+    'Обруч',
+    'Ограбление банка',
+    'Оригами',
+    'Отражение',
+    'Парус',
+    'Пачка чипсов',
+    'Пицца с ананасами',
+    'Поводок',
+    'Погоны',
+    'Подушка безопасности',
+    'Подсвечник',
+    'Подтягивание',
+    'Половник',
+    'Поплавок',
+    'Почтовый ящик',
+    'Прикроватная тумбочка',
+    'Прищепка',
+    'Пробка',
+    'Проектор',
+    'Разбитое зеркало',
+    'Раскладушка',
+    'Ремень безопасности',
+    'Сито',
+    'Скрипка',
+    'Складной нож',
+    'Складной стул',
+    'Сломанный зонт',
+    'Собачья будка',
+    'Солнечное затмение',
+    'Солнечный зайчик',
+    'Солнечный луч',
+    'Сопля',
+    'Сосиска в тесте',
+    'Таблица Менделеева',
+    'Телепортация',
+    'Тёрка',
+    'Термометр',
+    'Тир',
+    'Токсичность',
+    'Точилка',
+    'Транспортир',
+    'Туалетная бумага',
+    'Угловой диван',
+    'Уголь',
+    'Улей',
+    'Фокусник',
+    'Форточка',
+    'Фотобудка',
+    'Фотозона',
+    'Хлопушка',
+    'Часы с кукушкой',
+    'Чашка чая',
+    'Черепаха',
+    'Черная кошка',
+    'Шампунь',
+    'Штурвал',
+    'Щеколда'
   ]
 };
 
 let ctx = null;
 let eraserMode = false;
-let isLineMode = false;
 let drawing = false;
 let currentColor = '#000000';
-
-// Переменные для истории и линий
-let undoStack = [];
-let redoStack = [];
-let startPos = null;
-let snapshot = null;
 
 const clearBtn = document.getElementById('clear-btn');
 const eraserBtn = document.getElementById('eraser-btn');
@@ -55,12 +148,6 @@ const colorIndicator = document.getElementById('current-color-indicator');
 const colorModal = document.getElementById('color-modal');
 const closeColorModalBtn = document.getElementById('close-color-modal');
 const colorBtns = document.querySelectorAll('.color-btn');
-
-// Новые кнопки
-const undoBtn = document.getElementById('undo-btn');
-const redoBtn = document.getElementById('redo-btn');
-const freehandBtn = document.getElementById('freehand-btn');
-const lineBtn = document.getElementById('line-btn');
 
 /* Открытие */
 export function open(currentGame) {
@@ -99,39 +186,32 @@ function start(currentGame) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   eraserMode = false;
-  isLineMode = false;
   drawing = false;
   currentColor = '#000000';
-  
   eraserBtn.classList.remove('active');
-  if (lineBtn) lineBtn.classList.remove('active');
-  if (freehandBtn) freehandBtn.classList.add('active');
 
-  undoStack = [];
-  redoStack = [];
-
+  // Обновляем кружок на кнопке при старте
   if (colorIndicator) colorIndicator.style.backgroundColor = currentColor;
 
+  // Сброс выделения палитры (первый цвет активен)
   colorBtns.forEach(btn => btn.classList.remove('active'));
   if(colorBtns[0]) colorBtns[0].classList.add('active');
 
   applyBrush();
 
+  // Навешиваем обработчики
   clearBtn.addEventListener('click', onClear);
   eraserBtn.addEventListener('click', onToggleEraser);
   doneBtn.addEventListener('click', onDone);
   colorPickerBtn.addEventListener('click', onOpenColorModal);
   closeColorModalBtn.addEventListener('click', onCloseColorModal);
-  
-  if (undoBtn) undoBtn.addEventListener('click', onUndo);
-  if (redoBtn) redoBtn.addEventListener('click', onRedo);
-  if (freehandBtn) freehandBtn.addEventListener('click', onSelectFreehand);
-  if (lineBtn) lineBtn.addEventListener('click', onSelectLine);
 
+  // Обработчики для кнопок палитры
   colorBtns.forEach(btn => {
     btn.addEventListener('click', onColorChange);
   });
 
+  // Рисование — только после отсчёта
   let count = 3;
   drawTimer.textContent = '3';
   drawTimer.style.color = '#1565c0';
@@ -213,115 +293,47 @@ function endRound(currentGame) {
 function getPos(e) {
   const rect = canvas.getBoundingClientRect();
   const t = e.touches && e.touches.length ? e.touches[0] : e;
-  
-  // Правильный расчет координат с учетом масштабирования (CSS vs реальный размер)
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
-  
   return {
-    x: (t.clientX - rect.left) * scaleX,
-    y: (t.clientY - rect.top) * scaleY
+    x: t.clientX - rect.left,
+    y: t.clientY - rect.top
   };
-}
-
-function saveHistory() {
-  if (undoStack.length > 20) undoStack.shift();
-  undoStack.push(canvas.toDataURL());
-  redoStack = [];
-}
-
-function restoreHistory(dataUrl) {
-  const img = new Image();
-  img.onload = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0);
-    applyBrush();
-  };
-  img.src = dataUrl;
 }
 
 function onStart(e) {
   if (!ctx || !state.isRunning) return;
   e.preventDefault();
-  
-  saveHistory();
-  
   drawing = true;
-  startPos = getPos(e);
+  const p = getPos(e);
 
-  if (isLineMode) {
-    // Сохраняем текущий вид для предпросмотра
-    snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  } else {
-    ctx.beginPath();
-    ctx.moveTo(startPos.x, startPos.y);
-    // Точка при клике
-    ctx.lineTo(startPos.x + 0.1, startPos.y + 0.1);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(startPos.x, startPos.y);
-  }
+  ctx.beginPath();
+  ctx.moveTo(p.x, p.y);
+
+  // Рисуем точку той же толщины, что и линия
+  ctx.lineTo(p.x + 0.1, p.y + 0.1);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(p.x, p.y);
 }
 
 function onMove(e) {
   if (!drawing || !ctx || !state.isRunning) return;
   e.preventDefault();
   const p = getPos(e);
-
-  if (isLineMode) {
-    if (!snapshot) return;
-    // Очищаем и восстанавливаем снимок, затем рисуем новую линию
-    ctx.putImageData(snapshot, 0, 0);
-    ctx.beginPath();
-    ctx.moveTo(startPos.x, startPos.y);
-    ctx.lineTo(p.x, p.y);
-    ctx.stroke();
-  } else {
-    ctx.lineTo(p.x, p.y);
-    ctx.stroke();
-  }
+  ctx.lineTo(p.x, p.y);
+  ctx.stroke();
 }
 
-function onEnd(e) {
-  if (!drawing) return;
+function onEnd() {
   drawing = false;
-  
-  if (isLineMode) {
-    snapshot = null; // Сбрасываем снимок после завершения линии
-  } else {
-    if (ctx) ctx.beginPath();
-  }
+  if (ctx) ctx.beginPath();
 }
 
 function onClear(e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
   if (!ctx) return;
-  saveHistory();
   ctx.fillStyle = '#fff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   applyBrush();
-}
-
-function onUndo(e) {
-  if (e) { e.preventDefault(); e.stopPropagation(); }
-  if (undoStack.length === 0) return;
-  
-  const currentState = canvas.toDataURL();
-  redoStack.push(currentState);
-  
-  const previousState = undoStack.pop();
-  restoreHistory(previousState);
-}
-
-function onRedo(e) {
-  if (e) { e.preventDefault(); e.stopPropagation(); }
-  if (redoStack.length === 0) return;
-  
-  const currentState = canvas.toDataURL();
-  undoStack.push(currentState);
-  
-  const nextState = redoStack.pop();
-  restoreHistory(nextState);
 }
 
 function onToggleEraser(e) {
@@ -338,20 +350,6 @@ function onToggleEraser(e) {
   }
 
   applyBrush();
-}
-
-function onSelectFreehand(e) {
-  if (e) { e.preventDefault(); e.stopPropagation(); }
-  isLineMode = false;
-  if (lineBtn) lineBtn.classList.remove('active');
-  if (freehandBtn) freehandBtn.classList.add('active');
-}
-
-function onSelectLine(e) {
-  if (e) { e.preventDefault(); e.stopPropagation(); }
-  isLineMode = true;
-  if (freehandBtn) freehandBtn.classList.remove('active');
-  if (lineBtn) lineBtn.classList.add('active');
 }
 
 /* ============ ПАЛИТРА ============ */
@@ -376,6 +374,7 @@ function onColorChange(e) {
   colorBtns.forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
+  // Обновляем цвет кружка на кнопке
   if (colorIndicator) colorIndicator.style.backgroundColor = currentColor;
 
   applyBrush();
@@ -427,11 +426,6 @@ function removeDrawingListeners() {
   doneBtn.removeEventListener('click', onDone);
   colorPickerBtn.removeEventListener('click', onOpenColorModal);
   closeColorModalBtn.removeEventListener('click', onCloseColorModal);
-  
-  if (undoBtn) undoBtn.removeEventListener('click', onUndo);
-  if (redoBtn) redoBtn.removeEventListener('click', onRedo);
-  if (freehandBtn) freehandBtn.removeEventListener('click', onSelectFreehand);
-  if (lineBtn) lineBtn.removeEventListener('click', onSelectLine);
 
   colorBtns.forEach(btn => {
     btn.removeEventListener('click', onColorChange);
@@ -461,7 +455,4 @@ window.addEventListener('resize', () => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(temp, 0, 0, oldW, oldH);
   applyBrush();
-  
-  undoStack = [];
-  redoStack = [];
 });
