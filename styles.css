@@ -79,20 +79,6 @@ h1 {
 .yellow { background: #fbc02d; color: #333; }
 .yellow:hover { background: #f9a825; }
 
-/* НОВАЯ КНОПКА УСЛОЖНЕНИЯ */
-.hardmode-btn {
-  background: #795548;
-  color: #fff;
-  width: 100%;
-  margin-top: 15px;
-  padding: 18px;
-  font-size: 1.2rem;
-  border-radius: 16px;
-}
-.hardmode-btn:hover {
-  background: #5d4037;
-}
-
 /* Оверлей (для основных игр) */
 #overlay {
   position: fixed;
@@ -194,6 +180,23 @@ h1 {
   font-size: 1.2rem;
 }
 
+/* Кнопка усложнения (внутри модалки) */
+#hardmode-btn {
+  background: #5d4037; /* Темно-коричневый */
+  color: #fff;
+  width: 100%;
+  margin-top: 15px;
+  padding: 18px;
+  font-size: 1.2rem;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#hardmode-btn:hover {
+  background: #4e342e;
+}
+
 /* НОВОЕ ОКНО УСЛОЖНЕНИЯ */
 #hard-overlay {
   position: fixed;
@@ -216,7 +219,7 @@ h1 {
   text-align: center;
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
-.hard-modal h2 { color: #795548; margin-bottom: 20px; }
+.hard-modal h2 { color: #5d4037; margin-bottom: 20px; }
 .hard-modal p { font-size: 1.3rem; color: #333; margin-bottom: 30px; line-height: 1.5; }
 .hard-modal .btn { width: 100%; }
 
@@ -400,7 +403,7 @@ h1 {
   .hard-modal h2 { font-size: 1.2rem; margin-bottom: 10px; }
   .hard-modal p { font-size: 1rem; margin-bottom: 15px; }
   .hard-modal .btn { padding: 10px; font-size: 1rem; }
-  .hardmode-btn { padding: 10px; font-size: 0.9rem; margin-top: 10px; }
+  #hardmode-btn { padding: 10px; font-size: 0.9rem; margin-top: 10px; }
 
   /* --- ТАБЛО --- */
   #score-setup-overlay { padding: 5px; }
