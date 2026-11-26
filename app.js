@@ -8,7 +8,7 @@ import * as blitz from './games/blitz.js';
 import * as dice from './games/dice.js';
 import * as rules from './games/rules.js';
 import * as shakoblokun from './games/shakoblokun.js';
-import { showHardMode } from './games/hardmode.js'; // Импорт усложнений
+import { showHardMode } from './games/hardmode.js';
 
 /* Реестр игр: ключ → модуль */
 export const GAMES = { draw, speak, show, reverse, yesno, blitz, dice, rules, shakoblokun };
@@ -30,7 +30,7 @@ export const timerDisplay = $('#timer-display');
 export const modalButtons = $('#modal-buttons');
 export const startBtn = $('#start-btn');
 export const closeBtn = $('#close-btn');
-export const hardmodeBtn = $('#hardmode-btn'); // Новая кнопка
+export const hardmodeBtn = $('#hardmode-btn');
 export const drawOverlay = $('#draw-overlay');
 export const drawTimer = $('#draw-timer');
 export const canvas = $('#canvas');
@@ -134,10 +134,17 @@ export function openGame(key) {
   startBtn.onclick = null;
   closeBtn.onclick = closeOverlay;
 
-  // Показываем кнопку усложнения
+  // Показываем кнопку усложнения только для определенных игр
   if (hardmodeBtn) {
-    hardmodeBtn.classList.remove('hidden');
-    hardmodeBtn.onclick = () => showHardMode(state.currentGame);
+    const allowedGames = ['draw', 'show', 'speak', 'reverse', 'yesno', 'shakoblokun'];
+    
+    if (allowedGames.includes(key)) {
+      hardmodeBtn.classList.remove('hidden');
+      hardmodeBtn.onclick = () => showHardMode(state.currentGame);
+    } else {
+      hardmodeBtn.classList.add('hidden');
+      hardmodeBtn.onclick = null;
+    }
   }
 
   mod.open(state.currentGame);
@@ -165,7 +172,6 @@ export function closeOverlay() {
   closeBtn.classList.remove('hidden');
   startBtn.onclick = null;
 
-  // Скрываем кнопку усложнения
   if (hardmodeBtn) {
     hardmodeBtn.classList.add('hidden');
     hardmodeBtn.onclick = null;
@@ -173,12 +179,10 @@ export function closeOverlay() {
 }
 
 /* ============ ЗАПУСК ПОСЛЕ УСЛОЖНЕНИЯ ============ */
-// Слушаем событие, которое вызывает hardmode.js при нажатии "Старт"
 window.addEventListener('startHardMode', (e) => {
   const currentGame = e.detail;
   const mod = GAMES[currentGame.key];
   if (mod && mod.start) {
-    // Если у игры есть функция start (как в draw.js или speak.js), вызываем её
     mod.start(currentGame);
   }
 });
@@ -215,7 +219,6 @@ function initScoreGame() {
   const pointsGrid = $('#score-points-grid');
   const modalCloseBtn = $('#score-modal-close');
 
-  // Если кнопки нет на странице, прерываем инициализацию (защита от ошибок)
   if (!scoreGameBtn) return;
 
   const DEFAULT_COLORS = [
