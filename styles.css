@@ -46,6 +46,12 @@ h1 {
   max-width: 700px;
 }
 
+/* ВОЗВРАЩАЕМ РАСТЯЖКУ НА ВСЮ ШИРИНУ ДЛЯ БЛИЦА И ПОДСЧЕТА */
+#blitz-btn,
+#score-game-btn {
+  grid-column: 1 / -1;
+}
+
 .btn {
   border: none;
   border-radius: 16px;
@@ -75,9 +81,25 @@ h1 {
 .red { background: #c62828; }
 .red:hover { background: #d32f2f; }
 
-/* Новый желтый цвет для Блица */
 .yellow { background: #fbc02d; color: #333; }
 .yellow:hover { background: #f9a825; }
+
+/* Кнопка усложнения (внутри модалки) */
+#hardmode-btn {
+  background: #5d4037;
+  color: #fff;
+  width: 100%;
+  margin-top: 15px;
+  padding: 18px;
+  font-size: 1.2rem;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#hardmode-btn:hover {
+  background: #4e342e;
+}
 
 /* Оверлей (для основных игр) */
 #overlay {
@@ -178,23 +200,6 @@ h1 {
   flex: 1;
   padding: 18px;
   font-size: 1.2rem;
-}
-
-/* Кнопка усложнения (внутри модалки) */
-#hardmode-btn {
-  background: #5d4037; /* Темно-коричневый */
-  color: #fff;
-  width: 100%;
-  margin-top: 15px;
-  padding: 18px;
-  font-size: 1.2rem;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#hardmode-btn:hover {
-  background: #4e342e;
 }
 
 /* НОВОЕ ОКНО УСЛОЖНЕНИЯ */
@@ -381,7 +386,6 @@ h1 {
 
   .btn { padding: 10px 4px; font-size: 0.85rem; border-radius: 10px; }
 
-  /* --- МОДАЛКИ --- */
   #overlay { padding: 5px; }
   #modal {
     min-height: auto;
@@ -398,14 +402,12 @@ h1 {
   .blitz-list { font-size: 1rem; gap: 4px; }
   .rules-text { font-size: 0.85rem; max-height: 50vh; }
 
-  /* --- УСЛОЖНЕНИЕ --- */
   .hard-modal { padding: 15px; }
   .hard-modal h2 { font-size: 1.2rem; margin-bottom: 10px; }
   .hard-modal p { font-size: 1rem; margin-bottom: 15px; }
   .hard-modal .btn { padding: 10px; font-size: 1rem; }
   #hardmode-btn { padding: 10px; font-size: 0.9rem; margin-top: 10px; }
 
-  /* --- ТАБЛО --- */
   #score-setup-overlay { padding: 5px; }
   .score-modal { padding: 15px; max-height: calc(100dvh - 10px); overflow-y: auto; display: flex; flex-direction: column; }
   .score-modal h2 { font-size: 1.2rem; margin-bottom: 10px; }
@@ -438,7 +440,6 @@ h1 {
     max-width: 95%;
   }
 
-  /* --- ШЛАКОБЛОКУНЬ --- */
   #shakoblokun-overlay {
     flex-direction: row;
     flex-wrap: wrap;
@@ -457,7 +458,6 @@ h1 {
   .shako-key { height: 35px; font-size: 0.9rem; }
   .shako-key-backspace { font-size: 1rem; }
 
-  /* --- РИСОВАНИЕ --- */
   #draw-timer { font-size: 1.6rem; padding: 2px 10px; top: 6px; right: 10px; }
   #draw-toolbar { top: 6px; left: 10px; gap: 6px; flex-direction: row; }
   #draw-toolbar button { padding: 6px 12px; font-size: 0.85rem; line-height: 1.1; white-space: nowrap; }
