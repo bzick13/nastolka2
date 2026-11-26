@@ -1,4 +1,4 @@
-import { rand } from '../app.js';
+import { rand, GAMES } from '../app.js'; // Импортируем реестр игр GAMES
 
 export const HARD_MODES = {
   draw: [
@@ -25,9 +25,6 @@ export const HARD_MODES = {
   shakoblokun: [
     { text: 'Таймер уменьшен до 30 секунд.', time: 30 },
     { text: 'Запрещено использовать кнопку стирания.', time: null }
-  ],
-  blitz: [
-    { text: 'Нужно угадать на 2 слова больше.', time: null }
   ]
 };
 
@@ -59,7 +56,7 @@ export function showHardMode(currentGame) {
   document.getElementById('hard-start-btn').onclick = () => {
     hardOverlay.classList.add('hidden');
     
-    // Сохраняем усложнение в текущую игру
+    // Сохраняем усложнение
     currentGame.hardMode = randomMode;
 
     // Если есть новое время, меняем его
@@ -67,8 +64,18 @@ export function showHardMode(currentGame) {
       currentGame.meta.time = randomMode.time;
     }
 
-    // Отправляем событие в app.js для запуска игры
-    window.dispatchEvent(new CustomEvent('startHardMode', { detail: currentGame }));
+    // Прячем модалку с правилами
+    document.getElementById('overlay').classList.add('hidden');
+
+    // Напрямую вызываем запуск игры из реестра GAMES
+    const mod = GAMES[gameKey];
+    if (mod) {
+      if (mod.start) {
+        mod.start(currentGame);
+      } else if (mod.open) {
+        mod.open(currentGame);
+      }
+    }
   };
 
   // Обработчик кнопки "Отмена"
