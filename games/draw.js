@@ -137,8 +137,15 @@ export const META = {
 
 let ctx = null;
 let eraserMode = false;
+let isLineMode = false;
 let drawing = false;
 let currentColor = '#000000';
+
+// Переменные для истории и линий
+let undoStack = [];
+let redoStack = [];
+let startPos = null;
+let snapshot = null;
 
 const clearBtn = document.getElementById('clear-btn');
 const eraserBtn = document.getElementById('eraser-btn');
@@ -148,6 +155,12 @@ const colorIndicator = document.getElementById('current-color-indicator');
 const colorModal = document.getElementById('color-modal');
 const closeColorModalBtn = document.getElementById('close-color-modal');
 const colorBtns = document.querySelectorAll('.color-btn');
+
+// Новые кнопки
+const undoBtn = document.getElementById('undo-btn');
+const redoBtn = document.getElementById('redo-btn');
+const freehandBtn = document.getElementById('freehand-btn');
+const lineBtn = document.getElementById('line-btn');
 
 /* Открытие */
 export function open(currentGame) {
@@ -186,14 +199,20 @@ function start(currentGame) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   eraserMode = false;
+  isLineMode = false;
   drawing = false;
   currentColor = '#000000';
+  
   eraserBtn.classList.remove('active');
+  if (lineBtn) lineBtn.classList.remove('active');
+  if (freehandBtn) freehandBtn.classList.add('active');
 
-  // Обновляем кружок на кнопке при старте
+  // Очищаем историю
+  undoStack = [];
+  redoStack = [];
+
   if (colorIndicator) colorIndicator.style.backgroundColor = currentColor;
 
-  // Сброс выделения палитры (первый цвет активен)
   colorBtns.forEach(btn => btn.classList.remove('active'));
   if(colorBtns[0]) colorBtns[0].classList.add('active');
 
@@ -205,8 +224,12 @@ function start(currentGame) {
   doneBtn.addEventListener('click', onDone);
   colorPickerBtn.addEventListener('click', onOpenColorModal);
   closeColorModalBtn.addEventListener('click', onCloseColorModal);
+  
+  if (undoBtn) undoBtn.addEventListener('click', onUndo);
+  if (redoBtn) redoBtn.addEventListener('click', onRedo);
+  if (freehandBtn) freehandBtn.addEventListener('click', onSelectFreehand);
+  if (lineBtn) lineBtn.addEventListener('click', onSelectLine);
 
-  // Обработчики для кнопок палитры
   colorBtns.forEach(btn => {
     btn.addEventListener('click', onColorChange);
   });
@@ -299,41 +322,100 @@ function getPos(e) {
   };
 }
 
+function saveHistory() {
+  if (undoStack.length > 20) undoStack.shift();
+  undoStack.push(canvas.toDataURL());
+  redoStack = [];
+}
+
+function restoreHistory(dataUrl) {
+  const img = new Image();
+  img.onload = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+    applyBrush();
+  };
+  img.src = dataUrl;
+}
+
 function onStart(e) {
   if (!ctx || !state.isRunning) return;
   e.preventDefault();
+  
+  saveHistory();
+  
   drawing = true;
-  const p = getPos(e);
+  startPos = getPos(e);
 
-  ctx.beginPath();
-  ctx.moveTo(p.x, p.y);
-
-  // Рисуем точку той же толщины, что и линия
-  ctx.lineTo(p.x + 0.1, p.y + 0.1);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(p.x, p.y);
+  if (isLineMode) {
+    snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  } else {
+    ctx.beginPath();
+    ctx.moveTo(startPos.x, startPos.y);
+    ctx.lineTo(startPos.x + 0.1, startPos.y + 0.1);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(startPos.x, startPos.y);
+  }
 }
 
 function onMove(e) {
   if (!drawing || !ctx || !state.isRunning) return;
   e.preventDefault();
   const p = getPos(e);
-  ctx.lineTo(p.x, p.y);
-  ctx.stroke();
+
+  if (isLineMode) {
+    ctx.putImageData(snapshot, 0, 0);
+    ctx.beginPath();
+    ctx.moveTo(startPos.x, startPos.y);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  } else {
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  }
 }
 
-function onEnd() {
+function onEnd(e) {
+  if (!drawing) return;
   drawing = false;
-  if (ctx) ctx.beginPath();
+  
+  if (isLineMode && snapshot) {
+    snapshot = null;
+  } else {
+    if (ctx) ctx.beginPath();
+  }
 }
 
 function onClear(e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
   if (!ctx) return;
+  saveHistory();
   ctx.fillStyle = '#fff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   applyBrush();
+}
+
+function onUndo(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  if (undoStack.length === 0) return;
+  
+  const currentState = canvas.toDataURL();
+  redoStack.push(currentState);
+  
+  const previousState = undoStack.pop();
+  restoreHistory(previousState);
+}
+
+function onRedo(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  if (redoStack.length === 0) return;
+  
+  const currentState = canvas.toDataURL();
+  undoStack.push(currentState);
+  
+  const nextState = redoStack.pop();
+  restoreHistory(nextState);
 }
 
 function onToggleEraser(e) {
@@ -350,6 +432,20 @@ function onToggleEraser(e) {
   }
 
   applyBrush();
+}
+
+function onSelectFreehand(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  isLineMode = false;
+  if (lineBtn) lineBtn.classList.remove('active');
+  if (freehandBtn) freehandBtn.classList.add('active');
+}
+
+function onSelectLine(e) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  isLineMode = true;
+  if (freehandBtn) freehandBtn.classList.remove('active');
+  if (lineBtn) lineBtn.classList.add('active');
 }
 
 /* ============ ПАЛИТРА ============ */
@@ -374,7 +470,6 @@ function onColorChange(e) {
   colorBtns.forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
-  // Обновляем цвет кружка на кнопке
   if (colorIndicator) colorIndicator.style.backgroundColor = currentColor;
 
   applyBrush();
@@ -426,6 +521,11 @@ function removeDrawingListeners() {
   doneBtn.removeEventListener('click', onDone);
   colorPickerBtn.removeEventListener('click', onOpenColorModal);
   closeColorModalBtn.removeEventListener('click', onCloseColorModal);
+  
+  if (undoBtn) undoBtn.removeEventListener('click', onUndo);
+  if (redoBtn) redoBtn.removeEventListener('click', onRedo);
+  if (freehandBtn) freehandBtn.removeEventListener('click', onSelectFreehand);
+  if (lineBtn) lineBtn.removeEventListener('click', onSelectLine);
 
   colorBtns.forEach(btn => {
     btn.removeEventListener('click', onColorChange);
@@ -455,4 +555,7 @@ window.addEventListener('resize', () => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(temp, 0, 0, oldW, oldH);
   applyBrush();
+  
+  undoStack = [];
+  redoStack = [];
 });
