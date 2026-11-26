@@ -182,11 +182,11 @@ export function closeOverlay() {
 window.addEventListener('startHardMode', (e) => {
   const currentGame = e.detail;
   const mod = GAMES[currentGame.key];
-  
+
   // Принудительно скрываем основное окно с правилами и сбрасываем флаг
   overlay.classList.add('hidden');
   state.isRunning = false; 
-  
+
   if (mod && mod.start) {
     mod.start(currentGame);
   } else if (mod && mod.open) {
