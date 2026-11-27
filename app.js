@@ -164,7 +164,7 @@ function showHardMode(currentGame) {
   // Обработчик кнопки "Старт"
   document.getElementById('hard-start-btn').onclick = () => {
     hardOverlay.classList.add('hidden');
-    
+
     // Сохраняем усложнение
     currentGame.hardMode = randomMode;
 
@@ -173,18 +173,19 @@ function showHardMode(currentGame) {
       currentGame.meta.time = randomMode.time;
     }
 
-    // Скрываем модалку с правилами и сбрасываем флаг
+    // Скрываем модалку с правилами
     overlay.classList.add('hidden');
-    state.isRunning = false;
 
-    // Запускаем игру
+    // Запускаем игру с небольшой задержкой, чтобы DOM обновился
     const mod = GAMES[gameKey];
     if (mod) {
-      if (mod.start) {
-        mod.start(currentGame);
-      } else if (mod.open) {
-        mod.open(currentGame);
-      }
+      setTimeout(() => {
+        if (mod.start) {
+          mod.start(currentGame);
+        } else if (mod.open) {
+          mod.open(currentGame);
+        }
+      }, 50);
     }
   };
 
