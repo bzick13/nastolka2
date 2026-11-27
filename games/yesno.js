@@ -1,6 +1,6 @@
 import {
   state, content, timerDisplay, startBtn, closeBtn,
-  rand, signalStart, signalEnd, soundYes, soundNo, // Импортируем звуки
+  rand, signalStart, signalEnd, soundYes, soundNo,
   showModalButtons, closeOverlay
 } from '../app.js';
 
@@ -25,8 +25,34 @@ export const META = {
   ]
 };
 
+// === МЕХАНИЗМ НЕПОВТОРЯЮЩИХСЯ СЛОВ ===
+let wordDeck = [];
+let lastWord = null;
+
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function getNextWord() {
+  if (wordDeck.length === 0) {
+    wordDeck = shuffle(META.words);
+    if (wordDeck[0] === lastWord && wordDeck.length > 1) {
+      [wordDeck[0], wordDeck[1]] = [wordDeck[1], wordDeck[0]];
+    }
+  }
+  const word = wordDeck.pop();
+  lastWord = word;
+  return word;
+}
+// ======================================
+
 export function open(currentGame) {
-  currentGame.currentWord = rand(META.words);
+  currentGame.currentWord = getNextWord(); // <-- ИЗМЕНЕНО
 
   content.innerHTML = `
     <div class="word">${currentGame.currentWord}</div>
@@ -34,8 +60,7 @@ export function open(currentGame) {
   `;
   timerDisplay.classList.remove('hidden');
   timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${META.time}`;
-  
-  // Скрываем кнопки Да/Нет при открытии правил
+
   const yesnoButtons = document.getElementById('yesno-buttons');
   if (yesnoButtons) yesnoButtons.classList.add('hidden');
 
@@ -76,8 +101,7 @@ function start(currentGame) {
 
       if (isButtonsMode && yesnoButtons) {
         yesnoButtons.classList.remove('hidden');
-        
-        // Вешаем звуки на кнопки
+
         yesBtn.onclick = () => soundYes();
         noBtn.onclick = () => soundNo();
       }
@@ -103,7 +127,6 @@ function startTimer() {
       signalEnd();
       state.isRunning = false;
 
-      // Скрываем кнопки в конце
       const yesnoButtons = document.getElementById('yesno-buttons');
       if (yesnoButtons) yesnoButtons.classList.add('hidden');
     }
@@ -111,7 +134,6 @@ function startTimer() {
 }
 
 export function cleanup() {
-  // При закрытии игры скрываем кнопки Да/Нет
   const yesnoButtons = document.getElementById('yesno-buttons');
   if (yesnoButtons) yesnoButtons.classList.add('hidden');
 }
