@@ -121,7 +121,7 @@ export function showModalButtons() {
 const HARD_MODES = {
   draw: [
     { text: 'Рисовать другой рукой.', time: null },
-    { text: 'Рисовать только прямые линии.', time: null },
+    { text: 'Рисовать только прямые линии.', time: null, linesOnly: true }, // <--- ФЛАГ ДОБАВЛЕН
     { text: 'Запрещено использовать кнопку стирания.', time: null },
     { text: 'Время ограничено 60 сек.', time: 60 }
   ],
@@ -188,7 +188,6 @@ function showHardMode(currentGame) {
     if (randomMode.time !== null) {
       currentGame.meta.time = randomMode.time;
 
-      // ИСПРАВЛЕНИЕ: Меняем время и в самом модуле игры, чтобы игры его подхватили
       const mod = GAMES[gameKey];
       if (mod && mod.META) {
         mod.META.time = randomMode.time;
