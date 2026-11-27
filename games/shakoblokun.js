@@ -203,7 +203,6 @@ function launchGameScreen(currentGame) {
         <div id="shako-word-slots"></div>
       </div>
       
-      <!-- Блок: текст слева, кнопка справа -->
       <div id="shako-action-row">
         <div id="shako-message"></div>
         <button id="shako-next-btn" class="btn green">Дальше</button>
@@ -236,8 +235,6 @@ function initGameLogic(currentGame) {
   activeIndex = 0;
 
   const nextBtn = document.getElementById('shako-next-btn');
-
-  // Скрываем кнопку в начале игры
   nextBtn.style.display = 'none';
   nextBtn.textContent = 'Дальше';
 
@@ -246,18 +243,24 @@ function initGameLogic(currentGame) {
   imgEl.style.display = 'block';
   imgEl.onerror = () => { imgEl.style.display = 'none'; };
 
+  // --- УСЛОЖНЕНИЕ: КАРТИНКА НА 5 СЕКУНД ---
+  if (currentGame.hardMode && currentGame.hardMode.text === 'Картинка будет показана только 5 секунд.') {
+    setTimeout(() => {
+      imgEl.style.visibility = 'hidden';
+    }, 5000);
+  }
+  // ------------------------------------------
+
   const slotsContainer = document.getElementById('shako-word-slots');
   const keyboardContainer = document.getElementById('shako-keyboard');
   const messageEl = document.getElementById('shako-message');
   const timerEl = document.getElementById('shako-timer');
 
-  // СБРОС СОСТОЯНИЯ
   messageEl.textContent = '';
   messageEl.style.color = '';
   slotsContainer.innerHTML = '';
   keyboardContainer.innerHTML = '';
 
-  // Слоты
   for (let i = 0; i < wordLen; i++) {
     const slot = document.createElement('div');
     slot.className = 'shako-slot';
@@ -272,7 +275,6 @@ function initGameLogic(currentGame) {
     slotsContainer.appendChild(slot);
   }
 
-  // Клавиатура ЙЦУКЕН
   const rows = [
     'ЙЦУКЕНГШЩЗХЪ',
     'ФЫВАПРОЛДЖЭ',
@@ -297,20 +299,26 @@ function initGameLogic(currentGame) {
     });
 
     if (rowIndex === 2) {
-      const backspaceKey = document.createElement('button');
-      backspaceKey.className = 'shako-key shako-key-backspace';
-      backspaceKey.textContent = '⌫';
-      backspaceKey.onclick = () => {
-        if (currentInput[activeIndex] !== '') {
-          currentInput[activeIndex] = '';
-          updateSlots();
-        } else if (activeIndex > 0) {
-          activeIndex--;
-          currentInput[activeIndex] = '';
-          updateSlots();
-        }
-      };
-      rowDiv.appendChild(backspaceKey);
+      // --- УСЛОЖНЕНИЕ: ЗАПРЕТ НА СТИРАНИЕ ---
+      const isNoEraser = currentGame.hardMode && currentGame.hardMode.text === 'Запрещено использовать кнопку стирания.';
+      
+      if (!isNoEraser) {
+        const backspaceKey = document.createElement('button');
+        backspaceKey.className = 'shako-key shako-key-backspace';
+        backspaceKey.textContent = '⌫';
+        backspaceKey.onclick = () => {
+          if (currentInput[activeIndex] !== '') {
+            currentInput[activeIndex] = '';
+            updateSlots();
+          } else if (activeIndex > 0) {
+            activeIndex--;
+            currentInput[activeIndex] = '';
+            updateSlots();
+          }
+        };
+        rowDiv.appendChild(backspaceKey);
+      }
+      // ----------------------------------------
     }
 
     keyboardContainer.appendChild(rowDiv);
@@ -357,8 +365,6 @@ function initGameLogic(currentGame) {
       messageEl.innerHTML = 'Правильно!';
       messageEl.style.color = '#2e7d32';
       nextBtn.textContent = 'Дальше';
-
-      // ПОКАЗЫВАЕМ КНОПКУ СПРАВА
       nextBtn.style.display = 'flex';
 
       clearInterval(state.timerInterval);
@@ -380,7 +386,6 @@ function initGameLogic(currentGame) {
     endRound();
   };
 
-  // Таймер игры
   let left = META.time;
   timerEl.textContent = left;
   timerEl.style.color = '#c62828';
@@ -393,12 +398,9 @@ function initGameLogic(currentGame) {
       state.timerInterval = null;
       signalEnd();
 
-      // ДВЕ СТРОЧКИ СЛЕВА
       messageEl.innerHTML = 'Время вышло!<br>Слово: ' + currentWord;
       messageEl.style.color = '#c62828';
       nextBtn.textContent = 'Завершить';
-
-      // ПОКАЗЫВАЕМ КНОПКУ СПРАВА
       nextBtn.style.display = 'flex';
 
       document.querySelectorAll('.shako-key').forEach(btn => btn.onclick = null);
