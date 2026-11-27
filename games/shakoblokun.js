@@ -147,7 +147,6 @@ function shuffle(array) {
 function getNextItem() {
   if (itemDeck.length === 0) {
     itemDeck = shuffle(META.words);
-    // Если первый элемент новой колоды совпадает с последним из прошлой — меняем местами
     if (itemDeck[0] === lastItem && itemDeck.length > 1) {
       [itemDeck[0], itemDeck[1]] = [itemDeck[1], itemDeck[0]];
     }
@@ -160,10 +159,11 @@ function getNextItem() {
 
 let currentInput = [];
 let activeIndex = 0;
+let noEraserMode = false; // Флаг усложнения
 
 /* Открытие (модальное окно с правилами) */
 export function open(currentGame) {
-  currentGame.currentItem = getNextItem(); // <-- ИЗМЕНЕНО
+  currentGame.currentItem = getNextItem();
 
   content.innerHTML = `
     <div style="font-size: 1.05rem; font-weight: 600; color: #0d47a1; text-align: left; line-height: 1.5; margin-bottom: 15px;">
@@ -261,6 +261,10 @@ function initGameLogic(currentGame) {
   currentInput = Array(wordLen).fill('');
   activeIndex = 0;
 
+  // Проверка усложнений
+  const isNoEraser = currentGame.hardMode && currentGame.hardMode.text === 'Запрещено использовать кнопку стирания.';
+  noEraserMode = isNoEraser;
+
   const nextBtn = document.getElementById('shako-next-btn');
   nextBtn.style.display = 'none';
   nextBtn.textContent = 'Дальше';
@@ -293,7 +297,11 @@ function initGameLogic(currentGame) {
     const slot = document.createElement('div');
     slot.className = 'shako-slot';
     slot.dataset.index = i;
+    
+    // ИСПРАВЛЕНИЕ: Клик по слоту работает только если НЕ включен режим "без ластика"
     slot.onclick = () => {
+      if (noEraserMode) return; // Не даём стирать буквы кликом
+      
       if (currentInput[i] !== '') {
         currentInput[i] = '';
       }
@@ -327,8 +335,6 @@ function initGameLogic(currentGame) {
     });
 
     if (rowIndex === 2) {
-      const isNoEraser = currentGame.hardMode && currentGame.hardMode.text === 'Запрещено использовать кнопку стирания.';
-
       if (!isNoEraser) {
         const backspaceKey = document.createElement('button');
         backspaceKey.className = 'shako-key shako-key-backspace';
@@ -397,14 +403,30 @@ function initGameLogic(currentGame) {
       state.timerInterval = null;
       signalStart();
     } else {
-      slots.forEach(slot => slot.classList.add('wrong'));
-      messageEl.textContent = 'Неправильно. Попробуйте еще раз!';
-      messageEl.style.color = '#c62828';
+      // --- ИСПРАВЛЕНИЕ: Если неверно и стоит усложнение "Запрет стирания", сразу проигрыш ---
+      if (isNoEraser) {
+        slots.forEach(slot => slot.classList.add('wrong'));
+        messageEl.innerHTML = 'Ошибка! Слово: ' + currentWord;
+        messageEl.style.color = '#c62828';
+        nextBtn.textContent = 'Завершить';
+        nextBtn.style.display = 'flex';
+        
+        clearInterval(state.timerInterval);
+        state.timerInterval = null;
+        signalEnd();
+        
+        document.querySelectorAll('.shako-key').forEach(btn => btn.onclick = null);
+      } else {
+        // Обычная логика (подсветка красным и ожидание исправления)
+        slots.forEach(slot => slot.classList.add('wrong'));
+        messageEl.textContent = 'Неправильно. Попробуйте еще раз!';
+        messageEl.style.color = '#c62828';
 
-      setTimeout(() => {
-        slots.forEach(slot => slot.classList.remove('wrong'));
-        messageEl.textContent = '';
-      }, 1000);
+        setTimeout(() => {
+          slots.forEach(slot => slot.classList.remove('wrong'));
+          messageEl.textContent = '';
+        }, 1000);
+      }
     }
   }
 
@@ -451,6 +473,7 @@ export function cleanup() {
   clearInterval(state.timerInterval);
   state.timerInterval = null;
   state.isRunning = false;
+  noEraserMode = false;
 
   const overlay = document.getElementById('shakoblokun-overlay');
   if (overlay) {
