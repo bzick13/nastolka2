@@ -131,12 +131,39 @@ export const META = {
   ]
 };
 
+// === МЕХАНИЗМ НЕПОВТОРЯЮЩИХСЯ СЛОВ ===
+let itemDeck = [];
+let lastItem = null;
+
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function getNextItem() {
+  if (itemDeck.length === 0) {
+    itemDeck = shuffle(META.words);
+    // Если первый элемент новой колоды совпадает с последним из прошлой — меняем местами
+    if (itemDeck[0] === lastItem && itemDeck.length > 1) {
+      [itemDeck[0], itemDeck[1]] = [itemDeck[1], itemDeck[0]];
+    }
+  }
+  const item = itemDeck.pop();
+  lastItem = item;
+  return item;
+}
+// ======================================
+
 let currentInput = [];
 let activeIndex = 0;
 
 /* Открытие (модальное окно с правилами) */
 export function open(currentGame) {
-  currentGame.currentItem = rand(META.words);
+  currentGame.currentItem = getNextItem(); // <-- ИЗМЕНЕНО
 
   content.innerHTML = `
     <div style="font-size: 1.05rem; font-weight: 600; color: #0d47a1; text-align: left; line-height: 1.5; margin-bottom: 15px;">
@@ -241,6 +268,7 @@ function initGameLogic(currentGame) {
   const imgEl = document.getElementById('shako-image');
   imgEl.src = encodeURI(currentImage);
   imgEl.style.display = 'block';
+  imgEl.style.visibility = 'visible';
   imgEl.onerror = () => { imgEl.style.display = 'none'; };
 
   // --- УСЛОЖНЕНИЕ: КАРТИНКА НА 5 СЕКУНД ---
@@ -299,9 +327,8 @@ function initGameLogic(currentGame) {
     });
 
     if (rowIndex === 2) {
-      // --- УСЛОЖНЕНИЕ: ЗАПРЕТ НА СТИРАНИЕ ---
       const isNoEraser = currentGame.hardMode && currentGame.hardMode.text === 'Запрещено использовать кнопку стирания.';
-      
+
       if (!isNoEraser) {
         const backspaceKey = document.createElement('button');
         backspaceKey.className = 'shako-key shako-key-backspace';
@@ -318,7 +345,6 @@ function initGameLogic(currentGame) {
         };
         rowDiv.appendChild(backspaceKey);
       }
-      // ----------------------------------------
     }
 
     keyboardContainer.appendChild(rowDiv);
