@@ -90,6 +90,16 @@ export function signalEnd() {
   setTimeout(() => beep(440, 0.4, 'sawtooth'), 440);
 }
 
+// Звуки для кнопок Да/Нет
+export function soundYes() {
+  beep(600, 0.1, 'sine');
+  setTimeout(() => beep(800, 0.15, 'sine'), 100);
+}
+
+export function soundNo() {
+  beep(300, 0.2, 'sawtooth');
+}
+
 /* ============ ОБЩИЕ UI-ХЕЛПЕРЫ ============ */
 export function hideTimerAndStart() {
   timerDisplay.classList.add('hidden');
@@ -198,12 +208,11 @@ export function openGame(key) {
   const mod = GAMES[key];
   if (!mod) return;
 
-  // СОХРАНЯЕМ ОРИГИНАЛЬНОЕ ВРЕМЯ ИЗ META
   const originalTime = mod.META.time;
 
   state.currentGame = {
     key,
-    meta: { ...mod.META }, // Копируем, чтобы не менять оригинал
+    meta: { ...mod.META },
     originalTime: originalTime,
     currentWord: null,
     currentWords: null,
@@ -242,7 +251,6 @@ export function openGame(key) {
 export function closeOverlay() {
   clearIntervals();
 
-  // ВОССТАНАВЛИВАЕМ ВРЕМЯ В META ИГРЫ
   if (state.currentGame?.key && state.currentGame.originalTime !== undefined) {
     const mod = GAMES[state.currentGame.key];
     if (mod) {
