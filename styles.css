@@ -846,3 +846,41 @@ h1 {
   color: #fff;
   font-size: 1.4rem;
 }
+
+/* Кнопки Да/Нет */
+#yesno-buttons {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#yesno-buttons.hidden {
+  display: none;
+}
+
+.yn-btn {
+  flex: 1;
+  padding: 30px 20px;
+  font-size: 2rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.1s;
+}
+
+.yn-btn:active {
+  transform: scale(0.95);
+}
+
+.yn-btn.yes {
+  background: #2e7d32;
+}
+
+.yn-btn.no {
+  background: #c62828;
+}
