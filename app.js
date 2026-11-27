@@ -198,6 +198,10 @@ function showHardMode(currentGame) {
       }
     }
 
+    // === ИСПРАВЛЕНИЕ: СКРЫВАЕМ КНОПКУ УСЛОЖНЕНИЯ ПРИ СТАРТЕ ===
+    if (hardmodeBtn) hardmodeBtn.classList.add('hidden');
+    // ============================================================
+
     if (startBtn) {
       startBtn.click();
     }
@@ -237,7 +241,7 @@ export function openGame(key) {
   startBtn.onclick = null;
   closeBtn.onclick = closeOverlay;
 
-  // Скрываем кнопки Да/Нет при открытии новой игры (на всякий случай)
+  // Скрываем кнопки Да/Нет при открытии новой игры
   const yesnoButtons = document.getElementById('yesno-buttons');
   if (yesnoButtons) yesnoButtons.classList.add('hidden');
 
@@ -530,9 +534,9 @@ window.addEventListener('popstate', () => {
     startBtn.classList.remove('hidden');
     closeBtn.classList.remove('hidden');
     
-    // Скрываем кнопки Да/Нет
     const yesnoButtons = document.getElementById('yesno-buttons');
     if (yesnoButtons) yesnoButtons.classList.add('hidden');
+    if (hardmodeBtn) hardmodeBtn.classList.add('hidden');
     return;
   }
 
