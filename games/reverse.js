@@ -72,15 +72,40 @@ export const META = {
   ]
 };
 
+// === МЕХАНИЗМ НЕПОВТОРЯЮЩИХСЯ СЛОВ ===
+let wordDeck = [];
+let lastWord = null;
+
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function getNextWord() {
+  if (wordDeck.length === 0) {
+    wordDeck = shuffle(META.words);
+    if (wordDeck[0] === lastWord && wordDeck.length > 1) {
+      [wordDeck[0], wordDeck[1]] = [wordDeck[1], wordDeck[0]];
+    }
+  }
+  const word = wordDeck.pop();
+  lastWord = word;
+  return word;
+}
+// ======================================
+
 export function open(currentGame) {
-  currentGame.currentWord = rand(META.words);
+  currentGame.currentWord = getNextWord(); // <-- ИЗМЕНЕНО
 
   content.innerHTML = `
     <div class="word">${currentGame.currentWord}</div>
     <div class="points">Баллы: ${META.points}</div>
   `;
   timerDisplay.classList.remove('hidden');
-  // ИСПРАВЛЕНИЕ: Выводим слово "Время:"
   timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${META.time}`;
   showModalButtons();
   startBtn.classList.remove('hidden');
@@ -117,13 +142,11 @@ function start(currentGame) {
 
 function startTimer() {
   let left = META.time;
-  // ИСПРАВЛЕНИЕ: Выводим слово "Время:"
   timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${left}`;
   timerDisplay.classList.remove('hidden');
 
   state.timerInterval = setInterval(() => {
     left--;
-    // ИСПРАВЛЕНИЕ: Сохраняем слово "Время:"
     timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${left}`;
     if (left <= 0) {
       clearInterval(state.timerInterval);
