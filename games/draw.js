@@ -36,6 +36,33 @@ export const META = {
   ]
 };
 
+// === МЕХАНИЗМ НЕПОВТОРЯЮЩИХСЯ СЛОВ ===
+let wordDeck = [];
+let lastWord = null;
+
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function getNextWord() {
+  if (wordDeck.length === 0) {
+    wordDeck = shuffle(META.words);
+    // Если первое слово в новой колоде совпадает с последним из прошлой — меняем местами
+    if (wordDeck[0] === lastWord && wordDeck.length > 1) {
+      [wordDeck[0], wordDeck[1]] = [wordDeck[1], wordDeck[0]];
+    }
+  }
+  const word = wordDeck.pop();
+  lastWord = word;
+  return word;
+}
+// ======================================
+
 let ctx = null;
 let eraserMode = false;
 let isLineMode = false;
@@ -65,7 +92,7 @@ const lineBtn = document.getElementById('line-btn');
 
 /* Открытие */
 export function open(currentGame) {
-  currentGame.currentWord = rand(META.words);
+  currentGame.currentWord = getNextWord(); // <-- ИЗМЕНЕНО
 
   content.innerHTML = `
     <div class="word">${currentGame.currentWord}</div>
@@ -150,7 +177,7 @@ function start(currentGame) {
   doneBtn.addEventListener('click', onDone);
   colorPickerBtn.addEventListener('click', onOpenColorModal);
   closeColorModalBtn.addEventListener('click', onCloseColorModal);
-  
+
   if (undoBtn) undoBtn.addEventListener('click', onUndo);
   if (redoBtn) redoBtn.addEventListener('click', onRedo);
   if (freehandBtn) freehandBtn.addEventListener('click', onSelectFreehand);
@@ -241,10 +268,10 @@ function endRound(currentGame) {
 function getPos(e) {
   const rect = canvas.getBoundingClientRect();
   const t = e.touches && e.touches.length ? e.touches[0] : e;
-  
+
   const scaleX = canvas.width / rect.width;
   const scaleY = canvas.height / rect.height;
-  
+
   return {
     x: (t.clientX - rect.left) * scaleX,
     y: (t.clientY - rect.top) * scaleY
@@ -270,9 +297,9 @@ function restoreHistory(dataUrl) {
 function onStart(e) {
   if (!ctx || !state.isRunning) return;
   e.preventDefault();
-  
+
   saveHistory();
-  
+
   drawing = true;
   startPos = getPos(e);
 
@@ -309,7 +336,7 @@ function onMove(e) {
 function onEnd(e) {
   if (!drawing) return;
   drawing = false;
-  
+
   if (isLineMode) {
     snapshot = null;
   } else {
@@ -329,10 +356,10 @@ function onClear(e) {
 function onUndo(e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
   if (undoStack.length === 0) return;
-  
+
   const currentState = canvas.toDataURL();
   redoStack.push(currentState);
-  
+
   const previousState = undoStack.pop();
   restoreHistory(previousState);
 }
@@ -340,10 +367,10 @@ function onUndo(e) {
 function onRedo(e) {
   if (e) { e.preventDefault(); e.stopPropagation(); }
   if (redoStack.length === 0) return;
-  
+
   const currentState = canvas.toDataURL();
   undoStack.push(currentState);
-  
+
   const nextState = redoStack.pop();
   restoreHistory(nextState);
 }
@@ -434,7 +461,7 @@ function enableDrawing() {
 export function cleanup() {
   removeDrawingListeners();
   colorModal.classList.add('hidden');
-  
+
   // Восстанавливаем кнопки, если они были скрыты усложнением
   clearBtn.style.display = '';
   eraserBtn.style.display = '';
@@ -459,7 +486,7 @@ function removeDrawingListeners() {
   doneBtn.removeEventListener('click', onDone);
   colorPickerBtn.removeEventListener('click', onOpenColorModal);
   closeColorModalBtn.removeEventListener('click', onCloseColorModal);
-  
+
   if (undoBtn) undoBtn.removeEventListener('click', onUndo);
   if (redoBtn) redoBtn.removeEventListener('click', onRedo);
   if (freehandBtn) freehandBtn.removeEventListener('click', onSelectFreehand);
@@ -493,7 +520,7 @@ window.addEventListener('resize', () => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(temp, 0, 0, oldW, oldH);
   applyBrush();
-  
+
   undoStack = [];
   redoStack = [];
 });
