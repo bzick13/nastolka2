@@ -39,15 +39,59 @@ export const META = {
   ]
 };
 
+// === МЕХАНИЗМ НЕПОВТОРЯЮЩИХСЯ СЛОВ (SHUFFLE BAG) ===
+let wordDeck = [];
+let lastWords = [];
+
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function getNextWords(count) {
+  // Если в колоде меньше слов, чем нужно — создаём новую колоду
+  if (wordDeck.length < count) {
+    const newDeck = shuffle(META.words);
+    
+    // Избегаем пересечения с последними выданными словами
+    if (lastWords.length > 0) {
+      const lastSet = new Set(lastWords);
+      let i = 0;
+      for (let j = 0; j < newDeck.length && i < lastWords.length; j++) {
+        if (lastSet.has(newDeck[j])) {
+          // Меняем местами с элементом, которого нет в lastWords
+          const swapIndex = newDeck.findIndex((w, idx) => idx > j && !lastSet.has(w));
+          if (swapIndex !== -1) {
+            [newDeck[j], newDeck[swapIndex]] = [newDeck[swapIndex], newDeck[j]];
+            i++;
+          }
+        }
+      }
+    }
+    
+    // Остатки старой колоды добавляем в конец новой (чтобы не терять слова)
+    wordDeck = [...wordDeck, ...newDeck];
+    lastWords = [];
+  }
+
+  const result = wordDeck.splice(0, count);
+  lastWords = result;
+  return result;
+}
+// ====================================================
+
 export function open(currentGame) {
-  currentGame.currentWords = pickN(META.words, 5);
+  currentGame.currentWords = getNextWords(5); // <-- ИЗМЕНЕНО
 
   content.innerHTML = `
     <div class="blitz-list">${currentGame.currentWords.map(w => `<div>${w}</div>`).join('')}</div>
     <div class="points">Баллы: ${META.points}</div>
   `;
   timerDisplay.classList.remove('hidden');
-  // ИСПРАВЛЕНИЕ: Добавляем слово "Время:"
   timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${META.time}`;
   showModalButtons();
   startBtn.classList.remove('hidden');
@@ -73,7 +117,6 @@ function start(currentGame) {
     } else {
       clearInterval(state.countdownInterval);
       state.countdownInterval = null;
-      // ТОТ ЖЕ список
       content.innerHTML = `
         <div class="blitz-list">${currentGame.currentWords.map(w => `<div>${w}</div>`).join('')}</div>
         <div class="points">Баллы: ${META.points}</div>
@@ -85,13 +128,11 @@ function start(currentGame) {
 
 function startTimer() {
   let left = META.time;
-  // ИСПРАВЛЕНИЕ: Добавляем слово "Время:"
   timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${left}`;
   timerDisplay.classList.remove('hidden');
 
   state.timerInterval = setInterval(() => {
     left--;
-    // ИСПРАВЛЕНИЕ: Сохраняем слово "Время:" при отсчете
     timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${left}`;
     if (left <= 0) {
       clearInterval(state.timerInterval);
