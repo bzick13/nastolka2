@@ -161,34 +161,27 @@ function showHardMode(currentGame) {
   document.getElementById('hard-text').textContent = randomMode.text;
   hardOverlay.classList.remove('hidden');
 
-  // Обработчик кнопки "Старт"
+  // Обработчик кнопки "Старт" в окне усложнения
   document.getElementById('hard-start-btn').onclick = () => {
     hardOverlay.classList.add('hidden');
 
-    // Сохраняем усложнение
+    // Сохраняем усложнение в текущую игру
     currentGame.hardMode = randomMode;
 
     // Если есть новое время, меняем его
     if (randomMode.time !== null) {
       currentGame.meta.time = randomMode.time;
+      
+      // Если таймер уже отображается в модалке, обновляем его
+      if (timerDisplay && !timerDisplay.classList.contains('hidden')) {
+        timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${randomMode.time}`;
+      }
     }
 
-    // Скрываем модалку с правилами
-    overlay.classList.add('hidden');
-    
-    // ПРИНУДИТЕЛЬНО СБРАСЫВАЕМ ФЛАГ (чтобы игра могла запуститься)
-    state.isRunning = false;
-
-    // Запускаем игру с небольшой задержкой, чтобы DOM обновился
-    const mod = GAMES[gameKey];
-    if (mod) {
-      setTimeout(() => {
-        if (mod.start) {
-          mod.start(currentGame);
-        } else if (mod.open) {
-          mod.open(currentGame);
-        }
-      }, 50);
+    // ИМИТИРУЕМ КЛИК ПО ОСНОВНОЙ КНОПКЕ "СТАРТ"
+    // Это запустит игру тем же кодом, что и при обычном нажатии
+    if (startBtn) {
+      startBtn.click();
     }
   };
 
