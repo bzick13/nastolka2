@@ -115,6 +115,7 @@ export function showTimerAndStart(value) {
 
 export function showModalButtons() {
   modalButtons.classList.remove('hidden');
+  // Кнопка "Усложнение" не трогается, чтобы не появлялась во время игры
 }
 
 /* ============ ДАННЫЕ УСЛОЖНЕНИЙ ============ */
@@ -198,9 +199,8 @@ function showHardMode(currentGame) {
       }
     }
 
-    // === ИСПРАВЛЕНИЕ: СКРЫВАЕМ КНОПКУ УСЛОЖНЕНИЯ ПРИ СТАРТЕ ===
+    // Скрываем кнопку усложнения при старте
     if (hardmodeBtn) hardmodeBtn.classList.add('hidden');
-    // ============================================================
 
     if (startBtn) {
       startBtn.click();
