@@ -10,14 +10,13 @@
 
 html, body {
   width: 100%;
-  min-height: 100%;
+  height: 100dvh; /* Фиксируем высоту под экран */
+  overflow: hidden; /* Запрещаем скролл самой страницы */
 }
 
 body {
   font-family: 'Segoe UI', system-ui, sans-serif;
   background: linear-gradient(160deg, #e3f2fd 0%, #bbdefb 100%);
-  min-height: 100vh;
-  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,6 +27,7 @@ header {
   width: 100%;
   padding: 20px 10px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 h1 {
@@ -44,6 +44,9 @@ h1 {
   padding: 16px;
   width: 100%;
   max-width: 700px;
+  overflow-y: auto; /* Скролл только внутри меню, если не влезет */
+  flex: 1;
+  align-content: center;
 }
 
 /* ВОЗВРАЩАЕМ РАСТЯЖКУ НА ВСЮ ШИРИНУ ДЛЯ БЛИЦА И ПОДСЧЕТА */
@@ -123,7 +126,7 @@ h1 {
   max-width: 600px;
   min-height: 320px;
   max-height: calc(100dvh - 40px);
-  overflow-y: auto;
+  overflow-y: auto; /* Скролл работает внутри модалки */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -181,7 +184,7 @@ h1 {
   line-height: 1.6;
   color: #222;
   max-height: 60vh;
-  overflow-y: auto;
+  overflow-y: auto; /* Скролл внутри правил */
   padding: 0 6px;
 }
 
@@ -342,7 +345,7 @@ h1 {
 
 /* ============ ГОРИЗОНТАЛЬ (ЛАНДШАФТ) ============ */
 @media (orientation: landscape) and (max-height: 500px) {
-  header { padding: 5px 10px; }
+  header { padding: 5px 10px; flex-shrink: 0; }
   h1 { font-size: 1.5rem; letter-spacing: 1px; }
 
   #menu {
@@ -351,6 +354,8 @@ h1 {
     gap: 8px;
     padding: 8px;
     max-width: 100%;
+    overflow-y: auto;
+    align-content: center;
   }
 
   #blitz-btn,
