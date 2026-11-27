@@ -60,44 +60,73 @@ export function getAudioCtx() {
   if (!state.audioCtx) {
     state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
+  if (state.audioCtx.state === 'suspended') {
+    state.audioCtx.resume();
+  }
   return state.audioCtx;
 }
 
-export function beep(freq = 880, duration = 0.25, type = 'sine') {
+// Универсальная функция для создания одного "тона" с плавным затуханием
+function playTone(freq, type = 'sine', duration = 0.2, vol = 0.3, startTimeOffset = 0) {
   try {
     const ctx = getAudioCtx();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
+
     osc.type = type;
     osc.frequency.value = freq;
+
+    // Плавное затухание (звук "колокольчика")
+    const startTime = ctx.currentTime + startTimeOffset;
+    gain.gain.setValueAtTime(0, startTime);
+    gain.gain.linearRampToValueAtTime(vol, startTime + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
     osc.connect(gain);
     gain.connect(ctx.destination);
-    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-    osc.start();
-    osc.stop(ctx.currentTime + duration);
+
+    osc.start(startTime);
+    osc.stop(startTime + duration);
   } catch (e) { /* ignore */ }
 }
 
+// Старый beep (оставим для совместимости)
+export function beep(freq = 880, duration = 0.25, type = 'sine') {
+  playTone(freq, type, duration, 0.2);
+}
+
+// Красивый звук старта (восходящее арпеджио)
 export function signalStart() {
-  beep(660, 0.15, 'square');
-  setTimeout(() => beep(880, 0.3, 'square'), 160);
+  playTone(523.25, 'triangle', 0.15, 0.3, 0);      // C5
+  playTone(659.25, 'triangle', 0.15, 0.3, 0.1);    // E5
+  playTone(783.99, 'triangle', 0.25, 0.3, 0.2);    // G5
+  playTone(1046.50, 'triangle', 0.4, 0.3, 0.3);    // C6
 }
 
+// Звук окончания (нисходящее арпеджио с эффектом "выдоха")
 export function signalEnd() {
-  beep(880, 0.2, 'sawtooth');
-  setTimeout(() => beep(660, 0.2, 'sawtooth'), 220);
-  setTimeout(() => beep(440, 0.4, 'sawtooth'), 440);
+  playTone(880.00, 'sawtooth', 0.2, 0.2, 0);       // A5
+  playTone(659.25, 'sawtooth', 0.2, 0.2, 0.15);    // E5
+  playTone(523.25, 'sawtooth', 0.3, 0.2, 0.3);     // C5
+  playTone(349.23, 'sine', 0.6, 0.3, 0.45);        // F4 (низкий гул)
 }
 
-// Звуки для кнопок Да/Нет
+// Звук "ДА" (довольный, восходящий)
 export function soundYes() {
-  beep(600, 0.1, 'sine');
-  setTimeout(() => beep(800, 0.15, 'sine'), 100);
+  playTone(600, 'sine', 0.1, 0.3, 0);
+  playTone(800, 'sine', 0.15, 0.3, 0.1);
+  playTone(1200, 'sine', 0.2, 0.3, 0.2);
 }
 
+// Звук "НЕТ" (низкий, отрицающий)
 export function soundNo() {
-  beep(300, 0.2, 'sawtooth');
+  playTone(300, 'square', 0.15, 0.15, 0);
+  playTone(200, 'square', 0.25, 0.15, 0.15);
+}
+
+// Дополнительный звук: Тиканье таймера
+export function soundTick() {
+  playTone(800, 'square', 0.05, 0.1, 0);
 }
 
 /* ============ ОБЩИЕ UI-ХЕЛПЕРЫ ============ */
@@ -115,7 +144,6 @@ export function showTimerAndStart(value) {
 
 export function showModalButtons() {
   modalButtons.classList.remove('hidden');
-  // Кнопку усложнения здесь не трогаем, чтобы она не появлялась во время игры
 }
 
 /* ============ ДАННЫЕ УСЛОЖНЕНИЙ ============ */
@@ -212,7 +240,6 @@ function showHardMode(currentGame) {
 }
 
 /* ============ ГЛОБАЛЬНЫЙ ПЕРЕХВАТ СТАРТА ============ */
-// Скрываем кнопку усложнения при любом нажатии на "Старт"
 startBtn.addEventListener('click', () => {
   if (hardmodeBtn) hardmodeBtn.classList.add('hidden');
 });
@@ -246,7 +273,6 @@ export function openGame(key) {
   startBtn.onclick = null;
   closeBtn.onclick = closeOverlay;
 
-  // Скрываем кнопки Да/Нет при открытии новой игры
   const yesnoButtons = document.getElementById('yesno-buttons');
   if (yesnoButtons) yesnoButtons.classList.add('hidden');
 
@@ -283,7 +309,6 @@ export function closeOverlay() {
     shakoblokun.cleanup?.();
   }
 
-  // Принудительно скрываем кнопки Да/Нет
   const yesnoButtons = document.getElementById('yesno-buttons');
   if (yesnoButtons) yesnoButtons.classList.add('hidden');
 
@@ -443,7 +468,7 @@ function initScoreGame() {
   function openPointsModal(team, index) {
     if (index !== activeTeamIndex) {
       if (navigator.vibrate) navigator.vibrate(50);
-      return; 
+      return;
     }
 
     modalTeamName.textContent = team.name;
@@ -538,7 +563,7 @@ window.addEventListener('popstate', () => {
     state.currentGame = null;
     startBtn.classList.remove('hidden');
     closeBtn.classList.remove('hidden');
-    
+
     const yesnoButtons = document.getElementById('yesno-buttons');
     if (yesnoButtons) yesnoButtons.classList.add('hidden');
     if (hardmodeBtn) hardmodeBtn.classList.add('hidden');
@@ -555,8 +580,8 @@ window.addEventListener('popstate', () => {
 const scoreOverlays = [$('#score-setup-overlay'), $('#score-board-overlay'), $('#score-points-modal')];
 
 const observer = new MutationObserver(() => {
-  const isAnyOverlayOpen = 
-    !overlay.classList.contains('hidden') || 
+  const isAnyOverlayOpen =
+    !overlay.classList.contains('hidden') ||
     !drawOverlay.classList.contains('hidden') ||
     scoreOverlays.some(el => el && !el.classList.contains('hidden'));
 
