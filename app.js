@@ -115,7 +115,7 @@ export function showTimerAndStart(value) {
 
 export function showModalButtons() {
   modalButtons.classList.remove('hidden');
-  // Кнопка "Усложнение" не трогается, чтобы не появлялась во время игры
+  // Кнопку усложнения здесь не трогаем, чтобы она не появлялась во время игры
 }
 
 /* ============ ДАННЫЕ УСЛОЖНЕНИЙ ============ */
@@ -199,7 +199,6 @@ function showHardMode(currentGame) {
       }
     }
 
-    // Скрываем кнопку усложнения при старте
     if (hardmodeBtn) hardmodeBtn.classList.add('hidden');
 
     if (startBtn) {
@@ -211,6 +210,12 @@ function showHardMode(currentGame) {
     hardOverlay.classList.add('hidden');
   };
 }
+
+/* ============ ГЛОБАЛЬНЫЙ ПЕРЕХВАТ СТАРТА ============ */
+// Скрываем кнопку усложнения при любом нажатии на "Старт"
+startBtn.addEventListener('click', () => {
+  if (hardmodeBtn) hardmodeBtn.classList.add('hidden');
+});
 
 /* ============ ОТКРЫТИЕ ИГРЫ ============ */
 export function openGame(key) {
