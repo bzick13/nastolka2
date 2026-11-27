@@ -112,26 +112,36 @@ const HARD_MODES = {
   draw: [
     { text: 'Рисовать другой рукой.', time: null },
     { text: 'Рисовать только прямые линии.', time: null },
+    { text: 'Запрещено использовать кнопку стирания.', time: null },
     { text: 'Время ограничено 60 сек.', time: 60 }
   ],
   speak: [
-    { text: 'Говорить только шепотом.', time: null },
-    { text: 'Нельзя использовать глаголы.', time: null }
+    { text: 'Говорить только низким голосом.', time: null },
+    { text: 'Говорить только высоким голосом.', time: null },
+    { text: 'Говорить шепотом.', time: null },
+    { text: 'Нельзя говорить антонимы.', time: null },
+    { text: 'Время ограничено 20 сек.', time: 20 }
   ],
   show: [
-    { text: 'Показывать спиной к команде.', time: null },
-    { text: 'Показывать только одной рукой.', time: null }
+    { text: 'Показывать спиной к сокоманднику.', time: null },
+    { text: 'Показывать только руками.', time: null },
+    { text: 'Время ограничено 45 сек.', time: 45 }
   ],
   reverse: [
-    { text: 'Читать слово только один раз.', time: null },
-    { text: 'Читать слово задом наперед.', time: null }
+    { text: 'Прочитайте слово наоборот только один раз.', time: null },
+    { text: 'Слово нужно отгадать с первого раза.', time: null },
+    { text: 'Время ограничено 20 сек.', time: 20 }
   ],
   yesno: [
-    { text: 'Отвечать только жестами.', time: null },
-    { text: 'Нельзя улыбаться.', time: null }
+    { text: 'Отвечать на вопросы можно только жестами.', time: null },
+    { text: 'Отвечать на вопросы кнопками.', time: null },
+    { text: 'Угадать с первого раза.', time: null },
+    { text: 'Время ограничено 75 сек.', time: 75 }
   ],
   shakoblokun: [
-    { text: 'Таймер уменьшен до 30 секунд.', time: 30 },
+    { text: 'Время ограничено 20 сек.', time: 20 },
+    { text: 'Угадать слово с первого раза.', time: null },
+    { text: 'Картинка будет показана только 5 секунд.', time: null },
     { text: 'Запрещено использовать кнопку стирания.', time: null }
   ]
 };
@@ -171,7 +181,7 @@ function showHardMode(currentGame) {
     // Если есть новое время, меняем его
     if (randomMode.time !== null) {
       currentGame.meta.time = randomMode.time;
-      
+
       // Если таймер уже отображается в модалке, обновляем его
       if (timerDisplay && !timerDisplay.classList.contains('hidden')) {
         timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${randomMode.time}`;
@@ -179,7 +189,6 @@ function showHardMode(currentGame) {
     }
 
     // ИМИТИРУЕМ КЛИК ПО ОСНОВНОЙ КНОПКЕ "СТАРТ"
-    // Это запустит игру тем же кодом, что и при обычном нажатии
     if (startBtn) {
       startBtn.click();
     }
