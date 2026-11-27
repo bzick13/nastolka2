@@ -175,6 +175,9 @@ function showHardMode(currentGame) {
 
     // Скрываем модалку с правилами
     overlay.classList.add('hidden');
+    
+    // ПРИНУДИТЕЛЬНО СБРАСЫВАЕМ ФЛАГ (чтобы игра могла запуститься)
+    state.isRunning = false;
 
     // Запускаем игру с небольшой задержкой, чтобы DOM обновился
     const mod = GAMES[gameKey];
