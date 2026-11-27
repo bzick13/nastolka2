@@ -188,6 +188,12 @@ function showHardMode(currentGame) {
     if (randomMode.time !== null) {
       currentGame.meta.time = randomMode.time;
 
+      // ИСПРАВЛЕНИЕ: Меняем время и в самом модуле игры, чтобы игры его подхватили
+      const mod = GAMES[gameKey];
+      if (mod && mod.META) {
+        mod.META.time = randomMode.time;
+      }
+
       if (timerDisplay && !timerDisplay.classList.contains('hidden')) {
         timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${randomMode.time}`;
       }
