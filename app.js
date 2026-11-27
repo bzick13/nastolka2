@@ -170,30 +170,24 @@ function showHardMode(currentGame) {
   document.getElementById('hard-text').textContent = randomMode.text;
   hardOverlay.classList.remove('hidden');
 
-  // Обработчик кнопки "Старт" в окне усложнения
   document.getElementById('hard-start-btn').onclick = () => {
     hardOverlay.classList.add('hidden');
 
-    // Сохраняем усложнение в текущую игру
     currentGame.hardMode = randomMode;
 
-    // Если есть новое время, меняем его
     if (randomMode.time !== null) {
       currentGame.meta.time = randomMode.time;
 
-      // Если таймер уже отображается в модалке, обновляем его
       if (timerDisplay && !timerDisplay.classList.contains('hidden')) {
         timerDisplay.innerHTML = `<span class="timer-label">Время:</span> ${randomMode.time}`;
       }
     }
 
-    // ИМИТИРУЕМ КЛИК ПО ОСНОВНОЙ КНОПКЕ "СТАРТ"
     if (startBtn) {
       startBtn.click();
     }
   };
 
-  // Обработчик кнопки "Отмена"
   document.getElementById('hard-cancel-btn').onclick = () => {
     hardOverlay.classList.add('hidden');
   };
@@ -204,9 +198,13 @@ export function openGame(key) {
   const mod = GAMES[key];
   if (!mod) return;
 
+  // СОХРАНЯЕМ ОРИГИНАЛЬНОЕ ВРЕМЯ ИЗ META
+  const originalTime = mod.META.time;
+
   state.currentGame = {
     key,
-    meta: mod.META,
+    meta: { ...mod.META }, // Копируем, чтобы не менять оригинал
+    originalTime: originalTime,
     currentWord: null,
     currentWords: null,
     hardMode: null
@@ -225,7 +223,6 @@ export function openGame(key) {
   startBtn.onclick = null;
   closeBtn.onclick = closeOverlay;
 
-  // Показываем кнопку усложнения только для определенных игр
   if (hardmodeBtn) {
     const allowedGames = ['draw', 'show', 'speak', 'reverse', 'yesno', 'shakoblokun'];
 
@@ -244,6 +241,14 @@ export function openGame(key) {
 /* ============ ЗАКРЫТИЕ ============ */
 export function closeOverlay() {
   clearIntervals();
+
+  // ВОССТАНАВЛИВАЕМ ВРЕМЯ В META ИГРЫ
+  if (state.currentGame?.key && state.currentGame.originalTime !== undefined) {
+    const mod = GAMES[state.currentGame.key];
+    if (mod) {
+      mod.META.time = state.currentGame.originalTime;
+    }
+  }
 
   if (state.currentGame?.key === 'draw') {
     draw.cleanup?.();
