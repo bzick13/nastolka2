@@ -121,7 +121,7 @@ export function showModalButtons() {
 const HARD_MODES = {
   draw: [
     { text: 'Рисовать другой рукой.', time: null },
-    { text: 'Рисовать только прямые линии.', time: null, linesOnly: true }, // <--- ФЛАГ ДОБАВЛЕН
+    { text: 'Рисовать только прямые линии.', time: null, linesOnly: true },
     { text: 'Запрещено использовать кнопку стирания.', time: null },
     { text: 'Время ограничено 60 сек.', time: 60 }
   ],
@@ -237,6 +237,10 @@ export function openGame(key) {
   startBtn.onclick = null;
   closeBtn.onclick = closeOverlay;
 
+  // Скрываем кнопки Да/Нет при открытии новой игры (на всякий случай)
+  const yesnoButtons = document.getElementById('yesno-buttons');
+  if (yesnoButtons) yesnoButtons.classList.add('hidden');
+
   if (hardmodeBtn) {
     const allowedGames = ['draw', 'show', 'speak', 'reverse', 'yesno', 'shakoblokun'];
 
@@ -269,6 +273,10 @@ export function closeOverlay() {
   if (state.currentGame?.key === 'shakoblokun') {
     shakoblokun.cleanup?.();
   }
+
+  // Принудительно скрываем кнопки Да/Нет
+  const yesnoButtons = document.getElementById('yesno-buttons');
+  if (yesnoButtons) yesnoButtons.classList.add('hidden');
 
   drawOverlay.classList.add('hidden');
   overlay.classList.add('hidden');
@@ -521,6 +529,10 @@ window.addEventListener('popstate', () => {
     state.currentGame = null;
     startBtn.classList.remove('hidden');
     closeBtn.classList.remove('hidden');
+    
+    // Скрываем кнопки Да/Нет
+    const yesnoButtons = document.getElementById('yesno-buttons');
+    if (yesnoButtons) yesnoButtons.classList.add('hidden');
     return;
   }
 
