@@ -66,7 +66,6 @@ export function getAudioCtx() {
   return state.audioCtx;
 }
 
-// Универсальная функция для создания одного "тона" с плавным затуханием
 function playTone(freq, type = 'sine', duration = 0.2, vol = 0.3, startTimeOffset = 0) {
   try {
     const ctx = getAudioCtx();
@@ -76,7 +75,6 @@ function playTone(freq, type = 'sine', duration = 0.2, vol = 0.3, startTimeOffse
     osc.type = type;
     osc.frequency.value = freq;
 
-    // Плавное затухание (звук "колокольчика")
     const startTime = ctx.currentTime + startTimeOffset;
     gain.gain.setValueAtTime(0, startTime);
     gain.gain.linearRampToValueAtTime(vol, startTime + 0.02);
@@ -90,41 +88,35 @@ function playTone(freq, type = 'sine', duration = 0.2, vol = 0.3, startTimeOffse
   } catch (e) { /* ignore */ }
 }
 
-// Старый beep (оставим для совместимости)
 export function beep(freq = 880, duration = 0.25, type = 'sine') {
   playTone(freq, type, duration, 0.2);
 }
 
-// Красивый звук старта (восходящее арпеджио)
 export function signalStart() {
-  playTone(523.25, 'triangle', 0.15, 0.3, 0);      // C5
-  playTone(659.25, 'triangle', 0.15, 0.3, 0.1);    // E5
-  playTone(783.99, 'triangle', 0.25, 0.3, 0.2);    // G5
-  playTone(1046.50, 'triangle', 0.4, 0.3, 0.3);    // C6
+  playTone(523.25, 'triangle', 0.15, 0.3, 0);
+  playTone(659.25, 'triangle', 0.15, 0.3, 0.1);
+  playTone(783.99, 'triangle', 0.25, 0.3, 0.2);
+  playTone(1046.50, 'triangle', 0.4, 0.3, 0.3);
 }
 
-// Звук окончания (нисходящее арпеджио с эффектом "выдоха")
 export function signalEnd() {
-  playTone(880.00, 'sawtooth', 0.2, 0.2, 0);       // A5
-  playTone(659.25, 'sawtooth', 0.2, 0.2, 0.15);    // E5
-  playTone(523.25, 'sawtooth', 0.3, 0.2, 0.3);     // C5
-  playTone(349.23, 'sine', 0.6, 0.3, 0.45);        // F4 (низкий гул)
+  playTone(880.00, 'sawtooth', 0.2, 0.2, 0);
+  playTone(659.25, 'sawtooth', 0.2, 0.2, 0.15);
+  playTone(523.25, 'sawtooth', 0.3, 0.2, 0.3);
+  playTone(349.23, 'sine', 0.6, 0.3, 0.45);
 }
 
-// Звук "ДА" (довольный, восходящий)
 export function soundYes() {
   playTone(600, 'sine', 0.1, 0.3, 0);
   playTone(800, 'sine', 0.15, 0.3, 0.1);
   playTone(1200, 'sine', 0.2, 0.3, 0.2);
 }
 
-// Звук "НЕТ" (низкий, отрицающий)
 export function soundNo() {
   playTone(300, 'square', 0.15, 0.15, 0);
   playTone(200, 'square', 0.25, 0.15, 0.15);
 }
 
-// Дополнительный звук: Тиканье таймера
 export function soundTick() {
   playTone(800, 'square', 0.05, 0.1, 0);
 }
@@ -334,9 +326,7 @@ document.querySelectorAll('[data-game]').forEach(btn => {
   btn.addEventListener('click', () => openGame(btn.dataset.game));
 });
 
-overlay.addEventListener('click', (e) => {
-  if (e.target === overlay) closeOverlay();
-});
+/* ВАЖНО: Закрытие по клику на фон (#overlay) удалено, чтобы случайно не закрыть игру. */
 
 /* ============================================================
    ============ МОДУЛЬ ПОДСЧЕТА БАЛЛОВ =========================
