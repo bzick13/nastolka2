@@ -42,9 +42,9 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-content: flex-start; /* Кнопки сверху */
-  gap: 2vh; /* Отступы между кнопками зависят от высоты экрана */
-  padding: 2vh 16px;
+  align-content: flex-start; /* Кнопки прижаты к верху */
+  gap: 14px;
+  padding: 16px;
   width: 100%;
   max-width: 700px;
   flex: 1;
@@ -52,7 +52,7 @@ h1 {
 }
 
 #menu > .btn {
-  width: calc(50% - 1vh);
+  width: calc(50% - 7px);
   flex-grow: 0;
   flex-shrink: 1;
 }
@@ -66,8 +66,8 @@ h1 {
 .btn {
   border: none;
   border-radius: 16px;
-  padding: 1.5vh 10px; /* Высота кнопки зависит от экрана */
-  font-size: clamp(0.85rem, 2.5vh, 1.15rem); /* Шрифт адаптируется */
+  padding: 22px 10px;
+  font-size: 1.15rem;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
@@ -77,7 +77,7 @@ h1 {
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: 48px; /* Минимальная высота */
+  min-height: 68px;
 }
 
 .btn:active {
@@ -362,16 +362,16 @@ h1 {
   h1 { font-size: 1.5rem; letter-spacing: 1px; }
 
   #menu {
-    gap: 1vh;
-    padding: 1vh 8px;
+    gap: 8px;
+    padding: 8px;
     align-content: flex-start;
   }
 
   #menu > .btn {
-    width: calc(33.33% - 1vh);
+    width: calc(33.33% - 6px);
     padding: 1vh 4px;
     font-size: clamp(0.7rem, 2.5vh, 0.85rem);
-    min-height: 38px;
+    min-height: 40px;
   }
 
   #blitz-btn,
